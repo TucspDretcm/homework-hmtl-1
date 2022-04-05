@@ -1,14 +1,14 @@
 body {
     margin:0;
     padding:0;
-    background: url(../homework-hmtl-1/imagenes/Loginfondo2.jpg) no-repeat center top;
+    background: url(../homework-hmtl-1/imagenes/Registro2.jpeg) no-repeat center top;
     background-size: cover;
     font-family:sans-serif;   
 }
 
-.Login {
+.Registro {
     width: 320px;
-    height: 420px;
+    height: 480px;
     background: #000;
     color: #fff;
     top: 50%;
@@ -19,7 +19,7 @@ body {
     padding: 70px 30px;
   }
 
-.Login .imagen {
+.Registro .imagen {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -28,26 +28,26 @@ body {
     left: calc(50% - 50px);
   }
 
-.Login h1 {
+.Registro h1 {
     margin: 0;
     padding: 0 0 20px;
     text-align: center;
     font-size: 22px;
   }
   
-.Login label {
+.Registro label {
     margin: 0;
     padding: 0;
     font-weight: bold;
     display: block;
   }
 
-.Login input {
+.Registro input {
     width: 100%;
     margin-bottom: 20px;
   }
 
-.Login input[type="text"], .Login input[type="contraseña"] {
+.Registro input[type="text"], .Registro input[type="contraseña"] {
     border: none;
     border-bottom: 1px solid rgb(255, 255, 255);
     background: transparent;
@@ -57,7 +57,7 @@ body {
     font-size: 16px;
   }
   
-.Login input[type="submit"] {
+.Registro input[type="submit"] {
     border: none;
     outline: none;
     height: 40px;
@@ -67,19 +67,19 @@ body {
     border-radius: 20px;
   }
   
-.Login input[type="submit"]:hover {
+.Registro input[type="submit"]:hover {
     cursor: pointer;
     background: #ffc107;
     color: #000;
   }
   
-.Login a {
+.Registro a {
     text-decoration: none;
     font-size: 12px;
     line-height: 20px;
     color: darkgrey;
   }
   
-.Login a:hover {
+.Registro a:hover {
     color: #fff;
   }
