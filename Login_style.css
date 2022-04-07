@@ -57,7 +57,7 @@ body {
     font-size: 16px;
   }
   
-.Login input[type="submit"] {
+.Login input[type="button"] {
     border: none;
     outline: none;
     height: 40px;
@@ -67,19 +67,19 @@ body {
     border-radius: 20px;
   }
   
-.Login input[type="submit"]:hover {
+.Login input[type="button"]:hover {
     cursor: pointer;
     background: #ffc107;
     color: #000;
   }
-  
-.Login a {
-    text-decoration: none;
-    font-size: 12px;
-    line-height: 20px;
-    color: darkgrey;
-  }
-  
-.Login a:hover {
-    color: #fff;
-  }
+
+
+
+
+
+.opciones{
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 20px;
+  color: darkgrey; 
+}
