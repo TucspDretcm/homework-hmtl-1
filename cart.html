@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="my_bar_style.css">
 	<script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
     <title>Carrito de Compras</title>
     <link rel="shortcut icon" href="imagenes/carro.png" type="image/x-icon">
-    <link rel="stylesheet" href="cart_style">
+    
+    <link rel="stylesheet" type="text/css" href="my_bar_style.css">
+    <link rel="stylesheet" type="text/css" href="cart_style.css">
+
 </head>
 <body>
-    <header>
+
+    <header> 
         <nav>
             <a href="main_page.html"><img src="imagenes/logo.jpg" class="logo"></a>
 
@@ -31,5 +34,75 @@
 
         </nav>	
     </header>
+
+    <div class="container">
+        <h1>Carrito de Compras</h1>
+        <div class="cart">
+            <div class="products">
+
+                <div class="product">
+                    <img src="img_productos\audifonos.jpg">
+                    <div class="product-info">
+                        <h3 class="product-name">Cascos de Chica Gamer Razer</h3>
+                        <h4 class="product-price">S/. 200</h4>
+                        <h4 class="product-offer">0%</h4>
+                        <p class="product-quantity">Cantidad: <input value="1" name="">
+                        <p class="product-remove">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <span class="remove">Quitar</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <img src="img_productos\camara.jpg">
+                    <div class="product-info">
+                        <h3 class="product-name">Cámara Streamer</h3>
+                        <h4 class="product-price">S/. 150</h4>
+                        <h4 class="product-offer">0%</h4>
+                        <p class="product-quantity">Cantidad: <input value="1" name="">
+                        <p class="product-remove">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <span class="remove">Quitar</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="product">
+                    <img src="img_productos\laptop.jpg">
+                    <div class="product-info">
+                        <h3 class="product-name">Laptop HP</h3>
+                        <h4 class="product-price">S/. 2500</h4>
+                        <h4 class="product-offer">0%</h4>
+                        <p class="product-quantity">Cantidad: <input value="1" name="">
+                        <p class="product-remove">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <span class="remove">Quitar</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <div class="cart-total">
+            <p>
+                <span>Precio Total</span>
+                <span>S/. 2850</span>
+            </p>
+            <p>
+                <span>Cantidad de Productos</span>
+                <span>3</span>
+            </p>
+
+            <!--Descuento si se puso en las clases product-offer-->
+            <p>
+                <span>Estas Ahorrando</span>
+                <span>S/. 0</span>
+            </p>
+            
+            <a href="#">Ir a Pagar</a>
+        </div>
+    </div>
+    
+
+
 </body>
 </html>
