@@ -1,35 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="my_bar_style.css">
-	<script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
-	<title>Amaxon</title>
+{% extends "layout.html" %}
 
-</head>
-<body>
-		<header>
-			<nav>
-				<a href="pantalla_principal.html"><img src="imagenes/logo.jpg" class="logo"></a>
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='aeas.css') }}">
+{% endblock%}
 
-				<input type="text" id="busqueda" value="">
-				<button class="lupa" onclick="document.getElementById('busqueda').value = ''">
-					<i class="fa-solid fa-magnifying-glass"></i>
-				</button>
-
-				<a href="forum.html" class="options-1"><b>Forum</b></a>
-				<a href="info.html" class="options-2"><b>Info</b></a>
-
-				
-				<a href="cart.html"><img src="imagenes/carrito.jpg" class="carrito"></a>
-				
-
-				<a href="login.html" class="options-3"><b>Sign Out</b></a>
-
-			</nav>	
-		</header>
-
+{% block body %}
 		<p>
 			a<br>
 			b<br>
@@ -69,7 +44,7 @@
 			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo<br>
 			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse<br>
 			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non<br>
-			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.			
+			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 		</p>
-</body>
-</html>
+
+{% endblock %}
