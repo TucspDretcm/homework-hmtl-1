@@ -1,3 +1,4 @@
+from pickle import READONLY_BUFFER
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
@@ -9,26 +10,38 @@ def index():
 	return render_template("index.html")
 
 
-@app.route("/new_user", methods=["POST"])
+@app.route("/register", methods=["POST"])
 def newUser():
-
 	database.append({"user": request.form.get("user"), 
 					"password": request.form.get("password")})
+	print (database)
+	return render_template("login.html")
 
-	return render_template("session.html", data=data)
 
-
-@app.route("/login", methods=["POST"])
+@app.route("/bienvenido", methods=["POST"])
 def validate_user():
 	user = request.form.get("user")
 	password = request.form.get("password")
 
 	for db in database:
 		if db["user"] == user and db["password"]==password:
-			return redirect(url_for("pantalla_principal.html"))
-			
-	return redirect(url_for("login.html"))
+			#return render_template("index.html")
+			print ( "Si existe 123412132" )
 
+	return render_template("login.html")
+
+
+@app.route("/login")
+def mostrarlogin():
+	return render_template("login.html")
+
+
+
+
+
+@app.route("/register")
+def register():
+	return render_template("register.html")
 
 
 @app.route("/show_users")

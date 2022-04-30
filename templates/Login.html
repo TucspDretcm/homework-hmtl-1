@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="Login_style.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Login_style.css') }}">
   <title>Amaxon-Login</title>
 </head>
 
 <body>
   <div class="Login">
     
-    <img src="imagenes/logo.jpg" class="imagen" >
+    <img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="imagen" >
 
     <header>
       <h1>Iniciar sesión</h1> 
     </header>
 
+    
     <label>Usuario:</label>
-    <input type="text" placeholder="Igresa tu Usuario ">
+    <form action="{{ url_for('validate_user')}}" method="post"> 
+      <input type="text" placeholder="Igresa tu Usuario " name="user">
 
-    <label>Contraseña:</label>
-    <input type="contraseña" placeholder="Igresa tu Contraseña ">
+      <label>Contraseña:</label>
+      <input type="contraseña" placeholder="Igresa tu Contraseña " name="password">
 
-    <a href="pantalla_principal.html">
-          <input type="button" value="Login">
-    </a>
-   
+      
+      <input type="submit" value="Login">
+      
+    </form>
 
     <a href="#" class="opciones" >¿Olvidaste tu contraseña?</a>
-    <a href="Register.html" class="opciones">Crear cuenta nueva</a>
+    <a href="register" class="opciones">Crear cuenta nueva</a>
 
   </div>
 

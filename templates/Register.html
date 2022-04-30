@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="Register_style.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Register_style.css') }}">
   <title>Amaxon-Register</title>
 </head>
 
 <body>
   <div class="Registro">
     
-    <img src="imagenes/logo.jpg" class="imagen" >
+    <img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="imagen" >
 
     <header>
       <h1>Registrate!</h1> 
     </header>
 
     <label>Nombre de Usuario:</label>
-    <input type="text" placeholder="Igresa tu Usuario ">
+
+    <form action="{{ url_for('register')}}" method="post">
+    <input type="text" placeholder="Igresa tu Usuario " name="user">
 
     <label>Nueva Contraseña:</label>
-    <input type="contraseña" placeholder="Igresa tu Contraseña ">
+    <input type="contraseña" placeholder="Igresa tu Contraseña " name="password">
 
     <label>Confirma tu Contraseña:</label>
-    <input type="contraseña" placeholder="Confirma tu Contraseña ">
+    <input type="contraseña" placeholder="Confirma tu Contraseña "> 
 
     <input type="submit" value="Crear cuenta">
+    </form>
 
-    <a targe="_blank" href="Login.html">Iniciar Sesión</a>
+    <a targe="_blank" href="login">Iniciar Sesión</a>
 
 
   </div>
