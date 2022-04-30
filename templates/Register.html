@@ -16,16 +16,16 @@
 
     <label>Nombre de Usuario:</label>
 
-    <form action="{{ url_for('register')}}" method="post">
-    <input type="text" placeholder="Igresa tu Usuario " name="user">
+    <form action="{{ url_for('newUser')}}" method="post">
+      <input type="text" placeholder="Igresa tu Usuario " name="user">
 
-    <label>Nueva Contraseña:</label>
-    <input type="contraseña" placeholder="Igresa tu Contraseña " name="password">
+      <label>Nueva Contraseña:</label>
+      <input type="contraseña" placeholder="Igresa tu Contraseña " name="password">
 
-    <label>Confirma tu Contraseña:</label>
-    <input type="contraseña" placeholder="Confirma tu Contraseña "> 
+      <label>Confirma tu Contraseña:</label>
+      <input type="contraseña" placeholder="Confirma tu Contraseña " name="password_2"> 
 
-    <input type="submit" value="Crear cuenta">
+      <input type="submit" value="Crear cuenta">
     </form>
 
     <a targe="_blank" href="login">Iniciar Sesión</a>
