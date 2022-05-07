@@ -1,6 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+  <script> 
+  document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector("#botoncrearcuenta").disabled = true;
+
+  function comprobar(){
+    if (document.querySelector("#registrousuario").value.length > 0 && document.querySelector("#registrocontraseña1").value.length > 0 && document.querySelector("#registrocontraseña2").value.length > 0 ){
+      if(document.querySelector("#registrocontraseña1").value == document.querySelector("#registrocontraseña2").value ){
+      document.querySelector("#botoncrearcuenta").style.background="#ffc107";
+      document.querySelector("#botoncrearcuenta").style.color="black";
+
+      document.querySelector("#botoncrearcuenta").disabled = false;
+    }}
+    else
+    document.querySelector("#botoncrearcuenta").disabled = true;
+
+
+  }
+  
+  document.querySelector("#registrousuario" ).onkeyup = () => {
+    document.querySelector("#botoncrearcuenta").style.background="#b80f22";
+    document.querySelector("#botoncrearcuenta").style.color="#fff";
+    comprobar()
+  };
+  document.querySelector("#registrocontraseña1" ).onkeyup = () => {
+    document.querySelector("#botoncrearcuenta").style.background="#b80f22";
+    document.querySelector("#botoncrearcuenta").style.color="#fff";
+    comprobar()
+  };
+  document.querySelector("#registrocontraseña2" ).onkeyup = () => {
+    document.querySelector("#botoncrearcuenta").style.background="#b80f22";
+    document.querySelector("#botoncrearcuenta").style.color="#fff";
+    comprobar()
+  };
+  
+  });
+  </script>
+
+
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Register_style.css') }}">
   <title>Amaxon-Register</title>
 </head>
@@ -17,15 +56,15 @@
     <label>Nombre de Usuario:</label>
 
     <form action="{{ url_for('newUser')}}" method="post">
-      <input type="text" placeholder="Igresa tu Usuario " name="user">
+      <input id="registrousuario" type="text" placeholder="Igresa tu Usuario " name="user">
 
       <label>Nueva Contraseña:</label>
-      <input type="contraseña" placeholder="Igresa tu Contraseña " name="password">
+      <input id="registrocontraseña1" type="contraseña" placeholder="Igresa tu Contraseña " name="password">
 
       <label>Confirma tu Contraseña:</label>
-      <input type="contraseña" placeholder="Confirma tu Contraseña " name="password_2"> 
+      <input id= "registrocontraseña2" type="contraseña" placeholder="Confirma tu Contraseña " name="password_2"> 
 
-      <input type="submit" value="Crear cuenta">
+      <input id="botoncrearcuenta" type="submit" value="Crear cuenta">
     </form>
 
     <a targe="_blank" href="login">Iniciar Sesión</a>

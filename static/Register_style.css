@@ -67,11 +67,6 @@ body {
     border-radius: 20px;
   }
   
-.Registro input[type="submit"]:hover {
-    cursor: pointer;
-    background: #ffc107;
-    color: #000;
-  }
   
 .Registro a {
     text-decoration: none;
