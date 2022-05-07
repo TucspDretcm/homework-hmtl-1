@@ -3,10 +3,36 @@
 <head>
   <script> 
   
+  document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector("#iniciar").disabled = true;
+
+  function login(){
+    if (document.querySelector("#usuario").value.length > 0 && document.querySelector("#contraseña").value.length > 0){
+      document.querySelector("#iniciar").style.background="#ffc107";
+      document.querySelector("#iniciar").style.color="black";
+
+      document.querySelector("#iniciar").disabled = false;
+    }
+    else
+    document.querySelector("#iniciar").disabled = true;
+
+
+  }
   
+  document.querySelector("#usuario").onkeyup = () => {
+    document.querySelector("#iniciar").style.background="#b80f22";
+    document.querySelector("#iniciar").style.color="#fff";
+    login()
+  };
+  document.querySelector("#contraseña").onkeyup = () => {
+    document.querySelector("#iniciar").style.background="#b80f22";
+    document.querySelector("#iniciar").style.color="#fff";
+    login()
+  };
+
   
-  
-  </script>>
+});
+  </script>
 
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Login_style.css') }}">
   <title>Amaxon-Login</title>
@@ -24,13 +50,13 @@
     
     <label>Usuario:</label>
     <form action="{{ url_for('validateUser')}}" method="post"> 
-      <input type="text" placeholder="Igresa tu Usuario " name="user">
+      <input id="usuario" type="text" placeholder="Igresa tu Usuario " name="user">
 
       <label>Contraseña:</label>
-      <input type="contraseña" placeholder="Igresa tu Contraseña " name="password">
+      <input id="contraseña" type="contraseña" placeholder="Igresa tu Contraseña " name="password">
 
       
-      <input type="submit" value="Login">
+      <input id="iniciar" type="submit" value="Login">
       
     </form>
 

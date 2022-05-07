@@ -57,7 +57,7 @@ body {
     font-size: 16px;
   }
   
-.Login input[type="submit"] {
+  .Login input[type="submit"] {
     border: none;
     outline: none;
     height: 40px;
@@ -67,11 +67,7 @@ body {
     border-radius: 20px;
   }
   
-.Login input[type="submit"]:hover {
-    cursor: pointer;
-    background: #ffc107;
-    color: #000;
-  }
+
 
 
 .opciones{
