@@ -78,3 +78,12 @@ body {
 .Registro a:hover {
     color: #fff;
   }
+
+.alert-error{
+    text-align: center;
+    font-size: 2em;
+}
+
+.alert-error-button{
+    align-content: center;
+}

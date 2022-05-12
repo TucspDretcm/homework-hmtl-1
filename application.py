@@ -1,10 +1,11 @@
 #Grupo Amazon
 
 from pickle import READONLY_BUFFER
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import json
 
 app = Flask(__name__)
+app.secret_key = 'super secret'
 
 def get_data():
 	try:
@@ -44,7 +45,11 @@ def newUser():
 	password = request.form.get("password")
 	password_2 = request.form.get("password_2")
 
-	if password == password_2:
+	if password == password_2 and user!= None and password!=None:
+		for db in get_data():
+			if db["user"] == user:
+				flash("The account name alredy exist.")
+				return redirect("register")
 		save_data(user, password)
 		return render_template("login.html")
 	return redirect("register")   # redireciona a la ruta "../register"

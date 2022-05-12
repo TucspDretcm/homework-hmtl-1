@@ -6,17 +6,23 @@
   document.addEventListener('DOMContentLoaded', () => {
   document.querySelector("#botoncrearcuenta").disabled = true;
 
+  /*
+  document.querySelector("#alert-error-button").onclick = () => {
+    document.querySelector("#alert-error").style.visibility =  "hidden";
+  }
+  */
+
   function comprobar(){
     if (document.querySelector("#registrousuario").value.length > 0 && document.querySelector("#registrocontraseña1").value.length > 0 && document.querySelector("#registrocontraseña2").value.length > 0 ){
       if(document.querySelector("#registrocontraseña1").value == document.querySelector("#registrocontraseña2").value ){
-      document.querySelector("#botoncrearcuenta").style.background="#ffc107";
-      document.querySelector("#botoncrearcuenta").style.color="black";
+        document.querySelector("#botoncrearcuenta").style.background="#ffc107";
+        document.querySelector("#botoncrearcuenta").style.color="black";
 
-      document.querySelector("#botoncrearcuenta").disabled = false;
-    }}
+        document.querySelector("#botoncrearcuenta").disabled = false;
+      } 
+    }
     else
-    document.querySelector("#botoncrearcuenta").disabled = true;
-
+      document.querySelector("#botoncrearcuenta").disabled = true;
 
   }
   
@@ -45,6 +51,13 @@
 </head>
 
 <body>
+  {% for message in get_flashed_messages() %}
+    <script type="text/javascript">
+      var msg = "Error user name."; //{{ message }};
+      alert(msg);
+    </script>
+  {% endfor %}
+
   <div class="Registro">
     
     <img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="imagen" >
