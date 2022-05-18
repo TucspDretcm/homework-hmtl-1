@@ -9,7 +9,8 @@
     <body>
         <div align="center">
         <h2>   </h2>
-        <img width="340px" alt="iphone" src="img_productos/iphone.jpg"/>
+
+        <img width="340px" alt="iphone" src="{{ url_for('static', filename='img_productos/iphone.jpg') }}">
         <h1>Iphone 13 pro max</h1>
         <h2>S/. 6500</h2>
         <h2>Caracteristicas</h2>
@@ -20,15 +21,13 @@
         <li>iOS 15</li>
         <br>
         <form>
-            <a href="cart.html">
+            <a href="cart">
                 <input type="button" value="AGREGAR AL CARRITO">
             </a>
         </form>
 
         </div>
         
-
-    </body>
-          
+    </body>   
 
 </html>
