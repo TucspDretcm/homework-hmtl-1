@@ -83,9 +83,25 @@ def pantalla_render():
 	return render_template("pantalla_principal.html")
 
 
-@app.route("/forum")
-def forum_render():
-	return render_template("forum.html")
+@app.route("/forum", methods=["POST"])
+def inicio():
+	posts = Post.query.order_by(Post.fecha.desc()).all() 
+	return render_template("inicio.html", posts=posts)
+def agregar():
+	return render_template("agregar.html")
+def crear_post():
+	titulo = request.form.get("titulo")
+	texto = request.form.get("texto")
+	post = Post(titulo=titulo, texto=texto)
+	db.session.add(post)
+	db.session.commit()
+	return redirect("/")
+def borrar():
+	post_id = request.form.get("post_id")
+	post = db.session.query(Post).filter(Post.id==post_id).first()
+	db.session.delete(post)
+	db.session.commit()
+	return redirect("/")
 
 
 @app.route("/info")
