@@ -1,57 +1,22 @@
 <!--Pantalla Principal (productos)-->
+{% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='my_bar_style.css') }}">
-  <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
-    {% block head %}
-    {% endblock %}
-  </head>
-  <body>
-
-    <header>
-      <nav>
-        <a href="pantalla_principal"><img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="logo"></a>
-
-        <input type="text" id="busqueda" value="">
-        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-
-        <a href="forum" class="options-1"><b>Forum</b></a>
-        <a href="info" class="options-2"><b>Info</b></a>
-   
-        <a href="cart"><img src="{{ url_for('static', filename='imagenes/carrito.jpg') }}" class="carrito"></a>
-        
-        <a href="login" class="options-3"><b>Sign Out</b></a>
-
-      </nav>  
-    </header>
-
-    {% block body %}
-    {% endblock %}
+{% block head %}
+{% endblock %}
 
 
-    {% block body %}
-
-  <body style="background-color: darkgrey; ">
-  </body>
-  
-  <body>
+{% block body %}
     <div class="p">
       
       <hr></hr>
       <h2>   </h2>
-      <h1>Llena tu carrito del mejor hardware</h1><br><br>
+      <h1>Llena tu carrito del mejor Hardware</h1><br><br>
 
       
       <img width="280px" alt="laptop" src="{{ url_for('static', filename='img_productos/laptop.jpg') }}">
       <br>
       <form>
-        <a href="laptop">
+        <a href="/pantalla_principal/laptop">
           <input type="button" value="   LAPTOP HP CORE I5   ">
         </a>
       </form><br>
@@ -59,7 +24,7 @@
       <img width="280px" alt="iphone" src="{{ url_for('static', filename='img_productos/iphone.jpg') }}">
       <br>
       <form>
-        <a href="iphone">
+        <a href="/pantalla_principal/iphone">
           <input type="button" value="   IPHONE 13 PRO MAX   ">
         </a>
       </form><br>
@@ -67,7 +32,7 @@
       <img width="280px" alt="audifonos" src="{{ url_for('static', filename='img_productos/audifonos.jpg') }}">
       <br>
       <form>
-        <a href="audifonos">
+        <a href="/pantalla_principal/audifonos">
           <input type="button" value="   AUDIFONOS RAZER KRAKEN KITTY   ">
         </a>
       </form><br>
@@ -75,7 +40,7 @@
       <img width="280px" alt="camara" src="{{ url_for('static', filename='img_productos/camara.jpg') }}">
       <br>
       <form>
-        <a href="camara">
+        <a href="/pantalla_principal/camara">
           <input type="button" value="   CÁMARA LOGITECH C920   ">
         </a>
       </form><br>
@@ -89,8 +54,4 @@
       </form><br>
     </div>
 
-    {% endblock%}
-
-  </body>
-          
-</html>
+{% endblock %}

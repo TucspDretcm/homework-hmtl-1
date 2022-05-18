@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
+{% extends "layout.html" %}
 
+{% block head %}
         <title>Cámara Logitech C920</title>
+{% endblock%}
 
-        {% block head %}
-        {% endblock %}
 
-    </head>
-
-    <body style="background-color: lightgrey; "></body>
-    <body>
+{% block body %}
+        <br>
+        <br>
+        <br>
         <div align="center">
-        <h2>   </h2>
 
         <img width="340px" alt="camara" src="{{ url_for('static', filename='img_productos/camara.jpg') }}">
         <h1>Cámara Logitech C920</h1>
@@ -24,16 +21,13 @@
         <li>Audio estéreo con dos micrófonos</li>
         <br>
         <form>
-            <a href="cart">
+            <a href="..\cart">
                 <input type="button" value="AGREGAR AL CARRITO">
             </a>
         </form>
 
         </div>
-
-        {% block body %}
-        {% endblock %}
-
-    </body>
-
-</html>
+        <br>
+        <br>
+        <br>
+{% endblock%}

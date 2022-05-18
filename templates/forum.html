@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock%}
+
+{% block body %}
+		<img src="{{ url_for('static', filename='imagenes/soporte.jpg')}}" alt="soporte" width="50%" height="50%">
+
+		
+		<H1>Nos encanta tener una opinión de nuestros clientes, por lo que, <br>
+		agradeceríamos cualquier duda o reclamo.Escribelo en el foro.<br>
+		Estamos pendientes a cualquier observación.<br></H1>
+
+		<H2>Amaxon.</H2><br>
+
+    <form>
+      <input type="text" placeholder="Tu opinión es importante" name="name" width="600" height="500">
+      <button>Opina!</button>
+    </form>
+  
+{% endblock %}

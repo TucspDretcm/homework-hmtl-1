@@ -1,44 +1,39 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Mundopython</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-	<header class="main-head">
-		<nav>
-			<h1 id="logo">Flask Blog</h1>
-			<ul>
-				<li><a href="{{ url_for('inicio') }}">Inicio</a></li>
-				<li><a href="{{ url_for('agregar') }}">Agregar</a></li>
-			</ul>
-		</nav>
-	</header>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='my_bar_style.css') }}">
+  <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
+    {% block head %}
+    {% endblock %}
+  </head>
 
-	{% block body %}
-	{% endblock %}
-</body>
-=======
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Mundopython</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-	<header class="main-head">
-		<nav>
-			<h1 id="logo">Flask Blog</h1>
-			<ul>
-				<li><a href="{{ url_for('inicio') }}">Inicio</a></li>
-				<li><a href="{{ url_for('agregar') }}">Agregar</a></li>
-			</ul>
-		</nav>
-	</header>
+  <body>
 
-	{% block body %}
-	{% endblock %}
-</body>
->>>>>>> 4996486 (Se agrega el proyecto)
+    <header>
+      <nav>
+        <a href="..\pantalla_principal"><img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="logo"></a>
+
+        <input type="text" id="busqueda" value="">
+        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <a href="forum" class="options-1"><b>Forum</b></a>
+        <a href="info" class="options-2"><b>Info</b></a>
+
+        
+        <a href="cart"><img src="{{ url_for('static', filename='imagenes/carrito.jpg') }}" class="carrito"></a>
+        
+
+        <a href="login" class="options-3"><b>Sign Out</b></a>
+
+      </nav>  
+    </header>
+
+    {% block body %}
+    {% endblock %}
+
+  </body>
 </html>

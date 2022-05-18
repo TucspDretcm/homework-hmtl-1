@@ -1,6 +1,5 @@
 #Grupo Amazon
 
-from pickle import READONLY_BUFFER
 from flask import Flask, render_template, request, redirect, url_for, flash
 import json
 
@@ -82,27 +81,26 @@ def register_render():
 def pantalla_render():
 	return render_template("pantalla_principal.html")
 
+@app.route("/pantalla_principal/microfono")
+def render_microfono():
+	return render_template("microfono.html")
+@app.route("/pantalla_principal/camara")
+def render_camara():
+	return render_template("camara.html")
+@app.route("/pantalla_principal/audifonos")
+def render_audifonos():
+	return render_template("audifonos.html")
+@app.route("/pantalla_principal/iphone")
+def render_iphone():
+	return render_template("iphone.html")
+@app.route("/pantalla_principal/laptop")
+def render_laptop():
+	return render_template("laptop.html")
 
-@app.route("/forum", methods=["POST"])
-def inicio():
-	posts = Post.query.order_by(Post.fecha.desc()).all() 
-	return render_template("inicio.html", posts=posts)
-def agregar():
-	return render_template("agregar.html")
-def crear_post():
-	titulo = request.form.get("titulo")
-	texto = request.form.get("texto")
-	post = Post(titulo=titulo, texto=texto)
-	db.session.add(post)
-	db.session.commit()
-	return redirect("/")
-def borrar():
-	post_id = request.form.get("post_id")
-	post = db.session.query(Post).filter(Post.id==post_id).first()
-	db.session.delete(post)
-	db.session.commit()
-	return redirect("/")
 
+@app.route("/forum")
+def forum_render():
+	return render_template("forum.html")
 
 @app.route("/info")
 def info_render():

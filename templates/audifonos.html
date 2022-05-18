@@ -1,19 +1,16 @@
-<!DOCTYPE html>
-<html>
-  <head>
+{% extends "layout.html" %}
 
+{% block head %}
         <title>Audifonos Razer</title>
+{% endblock%}
 
-        {% block head %}
-        {% endblock %}
 
-    </head>
-
-    <body style="background-color: lightgrey; "></body>
-    <body>
+{% block body %}
+        <br>
+        <br>
+        <br>
         <div align="center">
-        <h2>   </h2>
-        <a href="pantalla_principal.html">
+
         <img width="340px" alt="audifonos" src="{{ url_for('static', filename='img_productos/audifonos.jpg') }}">
         <h1>Audifonos Razer Kraken Kitty</h1>
         <h2>S/. 200</h2>
@@ -24,16 +21,13 @@
         <li>Estilo perfecto para amantes de lo rosado</li>
         <br>
         <form>
-            <a href="cart">
+            <a href="..\cart">
                 <input type="button" value="AGREGAR AL CARRITO">
             </a>
         </form>
 
         </div>
-        
-        {% block body %}
-        {% endblock %}
-
-    </body>
-          
-</html>
+        <br>
+        <br>
+        <br>
+{% endblock%}

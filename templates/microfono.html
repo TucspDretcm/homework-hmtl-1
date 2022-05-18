@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
+{% extends "layout.html" %}
 
+{% block head %}
         <title>Microfono HyperX QuadCast</title>
+{% endblock%}
 
-        {% block head %}
-        {% endblock %}
 
-    </head>
-
-    <body style="background-color: lightgrey; "></body>
-    <body>
+{% block body %}
+        <br>
+        <br>
+        <br>
         <div align="center">
-        <h2>   </h2>
 
         <img width="340px" alt="microfono" src="{{ url_for('static', filename='img_productos/microfono.jpg') }}">
         <h1>Microfono HyperX QuadCast</h1>
@@ -25,16 +22,14 @@
         <li>Compatibilidad con múltiples dispositivos y programas</li>
         <br>
         <form>
-            <a href="cart">
+            <a href="..\cart">
                 <input type="button" value="AGREGAR AL CARRITO">
             </a>
         </form>
 
         </div>
+        <br>
+        <br>
+        <br>
+{% endblock %}
 
-        {% block body %}
-        {% endblock %}
-
-    </body>   
-
-</html>
