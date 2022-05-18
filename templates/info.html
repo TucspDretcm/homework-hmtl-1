@@ -1,36 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="my_bar_style.css">
-	<script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
-	<title>Información de la página</title>
+{% extends "layout.html" %}
 
-</head>
-<body>
-		<header>
-			<nav>
-				<a href="pantalla_principal.html"><img src="imagenes/logo.jpg" class="logo"></a>
+{% block head %}
+{% endblock%}
 
-				<input type="text" id="busqueda" value="">
-				<button class="lupa" onclick="document.getElementById('busqueda').value = ''">
-					<i class="fa-solid fa-magnifying-glass"></i>
-				</button>
-
-				<a href="forum.html" class="options-1"><b>Forum</b></a>
-				<a href="info.html" class="options-2"><b>Info</b></a>
-
-				
-				<a href="carrito.html"><img src="imagenes/carrito.jpg" class="carrito"></a>
-				
-
-				<a href="login.html" class="options-3"><b>Sign Out</b></a>
-
-			</nav>	
-		</header>
-		<body>
-		<p>
+{% block body %}
 		<H1>Información de la Página</H1><br>
 		1<br>
 		1<br>
@@ -84,5 +57,5 @@
 		1<br>
 		</p>
 		<H2>Amaxon Copyright Rights ©</H2>
-	</body>
-</html>
+		
+{% endblock %}
