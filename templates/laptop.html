@@ -3,6 +3,10 @@
   <head>
 
         <title>Laptop HP</title>
+
+        {% block head %}
+        {% endblock %}
+
     </head>
 
     <body style="background-color: lightgrey; "></body>
@@ -25,7 +29,10 @@
             </a>
         </form>
 
-        </div>    
+        </div>
+
+        {% block body %}
+        {% endblock %}
 
     </body>
 
