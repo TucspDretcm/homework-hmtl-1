@@ -13,9 +13,44 @@
 
 		<H2>Amaxon.</H2><br>
 
-    <form>
-      <input type="text" placeholder="Tu opinión es importante" name="name" width="600" height="500">
-      <button>Opina!</button>
-    </form>
-  
+		<script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelector("#b_submit").disabled = true;
+                document.querySelector("#task").onkeyup = () => {
+                    if (document.querySelector("#task").value.length > 0)
+                        document.querySelector("#b_submit").disabled = false;
+                    else
+                        document.querySelector("#b_submit").disabled = true;
+                }
+                document.querySelector('#new-task').onsubmit = () => {
+                    const li = document.createElement('li');
+                    if (document.querySelector('#task').value === "") {
+                        return false;
+                    }
+                    li.innerHTML = document.querySelector('#task').value;
+                    document.querySelector('#tasks').append(li);
+                    document.querySelector('#task').value = '';
+                    document.querySelector("#b_submit").disabled = true;
+                    return false;
+                };
+
+            });
+        </script>
+        <title>Forum</title>
+    </head>
+    <body>
+		
+        <h1>Pon tu opinión aquí:</h1>
+        <ul id="tasks">
+        </ul>
+        <form id="new-task">
+            <input id="task" autocomplete="off" autofocus placeholder="Opinión" type="text">
+            <input id="b_submit" type="submit">
+        </form>
+    </body>
+	<br>
+    <hr /> 
+	<h3> COMENTARIOS </h3>
+	<br><br>
+
 {% endblock %}

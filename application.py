@@ -6,12 +6,14 @@ import json
 app = Flask(__name__)
 app.secret_key = 'super secret' # uso de alert
 
-all_productos = [["AUDIFONOS RAZER KRAKEN KITTY",4500.99,"audifonos"],
-			["CÁMARA LOGITECH C920",789.99,"camara"],
-			["LAPTOP HP CORE I5",15000.99,"laptop"],
-			["IPHONE 13 PRO MAX",5999.99,"iphone"],
-			["MICROFONO HYPERX QUADCAST",5589.99,"microfono"]]
+all_productos = [["AUDIFONOS RAZER KRAKEN KITTY",700,"audifonos"],
+				["CÁMARA LOGITECH C920",399,"camara"],
+				["LAPTOP HP CORE I5",2099,"laptop"],
+				["IPHONE 13 PRO MAX",6699,"iphone"],
+				["MICROFONO HYPERX QUADCAST",599,"microfono"]]
 
+global user_name
+user_name = ""
 
 def get_data():
 	try:
@@ -86,6 +88,8 @@ def validateUser():
 
 @app.route("/cart", methods=["POST"])
 def send_car():
+	if user_name == "":
+		return redirect("login")
 	ob = int(request.form.get("object"))
 	for data in get_data():
 		if data["user"] == user_name and ob in data["products"]:
@@ -96,11 +100,15 @@ def send_car():
 
 @app.route("/login")
 def login_render():
+	global user_name
+	user_name = ""
 	return render_template("login.html")
 
 
 @app.route("/register")
 def register_render():
+	global user_name
+	user_name = ""
 	return render_template("register.html")
 
 
@@ -110,43 +118,19 @@ def pantalla_render():
 
 @app.route("/pantalla_principal/microfono")
 def render_microfono():
-	return render_template("microfono.html")
+	return render_template("microfono.html", precio=all_productos[4][1], nombre=all_productos[4][0])
 @app.route("/pantalla_principal/camara")
 def render_camara():
-	return render_template("camara.html")
+	return render_template("camara.html", precio=all_productos[1][1], nombre=all_productos[1][0])
 @app.route("/pantalla_principal/audifonos")
 def render_audifonos():
-	return render_template("audifonos.html")
+	return render_template("audifonos.html", precio=all_productos[0][1], nombre=all_productos[0][0])
 @app.route("/pantalla_principal/iphone")
 def render_iphone():
-	return render_template("iphone.html")
+	return render_template("iphone.html", precio=all_productos[3][1], nombre=all_productos[3][0])
 @app.route("/pantalla_principal/laptop")
 def render_laptop():
-	return render_template("laptop.html")
-
-
-# @app.route("/forum", methods=["POST"])
-# def inicio():
-# 	posts = Post.query.order_by(Post.fecha.desc()).all() 
-# 	return render_template("inicio.html", posts=posts)
-
-# def agregar():
-# 	return render_template("agregar.html")
-
-# def crear_post():
-# 	titulo = request.form.get("titulo")
-# 	texto = request.form.get("texto")
-# 	post = Post(titulo=titulo, texto=texto)
-# 	db.session.add(post)
-# 	db.session.commit()
-# 	return redirect("/")
-
-# def borrar():
-# 	post_id = request.form.get("post_id")
-# 	post = db.session.query(Post).filter(Post.id==post_id).first()
-# 	db.session.delete(post)
-# 	db.session.commit()
-# 	return redirect("/")
+	return render_template("laptop.html", precio=all_productos[2][1], nombre=all_productos[2][0])
 
 @app.route("/info")
 def info_render():
@@ -157,6 +141,8 @@ def forum_render():
 
 @app.route("/cart")
 def carrito_render():
+	if user_name == "":
+		return redirect("login")
 	productos = []
 	for data in get_data():
 		if data["user"] == user_name:
