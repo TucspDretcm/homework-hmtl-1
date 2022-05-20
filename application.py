@@ -6,6 +6,12 @@ import json
 app = Flask(__name__)
 app.secret_key = 'super secret' # uso de alert
 
+all_productos = [["AUDIFONOS RAZER KRAKEN KITTY",4500.99,"audifonos"],
+			["CÁMARA LOGITECH C920",789.99,"camara"],
+			["LAPTOP HP CORE I5",1234.99,"laptop"],
+			["IPHONE 13 PRO MAX",23129.99,"iphone"],
+			["MICROFONO HYPERX QUADCAST",5589.99,"microfono"]]
+
 
 def get_data():
 	try:
@@ -23,7 +29,7 @@ def save_data(a ,b):
 	try:
 		with open("database.json", "r+") as f:
 			db = json.load(f)
-			db.append({"user": a, "password": b})
+			db.append({"user": a, "password": b, "products":[]})
 			f.seek(0)
 			json.dump(db, f)
 	except:
@@ -32,6 +38,15 @@ def save_data(a ,b):
 			json.dump(database, f)
 		save_data(a,b)
 
+def save_product(a):
+	with open("database.json", "r+") as f:
+		db = json.load(f)
+		for data in db:
+			if data["user"] == user_name:
+				data["products"].append(a)
+				break				
+		f.seek(0)
+		json.dump(db, f)
 
 
 @app.route("/")
@@ -62,10 +77,21 @@ def validateUser():
 
 	for db in get_data():
 		if db["user"] == user and db["password"]==password:
+			global user_name
+			user_name = user
 			return render_template("bienvenido.html", name=user)
 
 	return redirect("login")
 
+
+@app.route("/cart", methods=["POST"])
+def send_car():
+	ob = int(request.form.get("object"))
+	for data in get_data():
+		if data["user"] == user_name and ob in data["products"]:
+			return redirect("cart")
+	save_product(ob)
+	return redirect("cart")
 
 
 @app.route("/login")
@@ -131,7 +157,12 @@ def forum_render():
 
 @app.route("/cart")
 def carrito_render():
-	return render_template("cart.html")
+	productos = []
+	for data in get_data():
+		if data["user"] == user_name:
+			for i in data["products"]:
+				productos.append(all_productos[i])
+	return render_template("cart.html", productos=productos)
 
 
 @app.route("/users")

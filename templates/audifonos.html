@@ -20,10 +20,9 @@
         <li>Marco de aluminio resistente</li>
         <li>Estilo perfecto para amantes de lo rosado</li>
         <br>
-        <form>
-            <a href="..\cart">
-                <input type="button" value="AGREGAR AL CARRITO">
-            </a>
+        <form action="{{ url_for('send_car')}}" method="post">
+            <input type="submit" value="AGREGAR AL CARRITO"><br>
+            <input type="text" value="0" name="object" style="visibility: hidden;">
         </form>
 
         </div>

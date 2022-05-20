@@ -20,10 +20,9 @@
         <li>Corrección de iluminación automática HD</li>
         <li>Audio estéreo con dos micrófonos</li>
         <br>
-        <form>
-            <a href="..\cart">
-                <input type="button" value="AGREGAR AL CARRITO">
-            </a>
+        <form action="{{ url_for('send_car')}}" method="post">
+            <input type="submit" value="AGREGAR AL CARRITO"><br>
+        <input type="text" value="1" name="object" style="visibility: hidden;">
         </form>
 
         </div>

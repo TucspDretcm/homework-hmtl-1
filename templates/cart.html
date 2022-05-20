@@ -6,6 +6,10 @@
 <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='imagenes/carro.png') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cart_style.css') }}">
 
+<script type="text/javascript">
+    document.getElementById("imagen_producto")setAttribute("src", "{{link}}")
+</script>
+
 {% endblock%}
 
 
@@ -17,51 +21,37 @@
         <div class="cart">
             <div class="products">
 
-                <div class="product">
-                    <img src="{{ url_for('static', filename='img_productos/audifonos.jpg') }}">
-                    <div class="product-info">
-                        <h3 class="product-name">Cascos de Chica Gamer Razer</h3>
-                        <h4 class="product-price">S/. 200</h4>
-                        <h4 class="product-offer">0%</h4>
-                        <p class="product-quantity">Cantidad: <input value="1" name="">
-                        <p class="product-remove">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                            <span class="remove">Quitar</span>
-                        </p>
+                {% for producto in productos %}
+                    <div class="product">
+                        {% if producto[2] == 'audifonos' %}
+                            <img src="{{ url_for('static', filename='img_productos/audifonos.jpg') }}">
+                        {% endif %}
+                        {% if producto[2] == 'camara' %}
+                            <img src="{{ url_for('static', filename='img_productos/camara.jpg') }}">
+                        {% endif %}
+                        {% if producto[2] == 'microfono' %}
+                            <img src="{{ url_for('static', filename='img_productos/microfono.jpg') }}">
+                        {% endif %}
+                        {% if producto[2] == 'laptop' %}
+                            <img src="{{ url_for('static', filename='img_productos/laptop.jpg') }}">
+                        {% endif %}
+                        {% if producto[2] == 'iphone' %}
+                            <img src="{{ url_for('static', filename='img_productos/iphone.jpg') }}">
+                        {% endif %}
+                        <div class="product-info">
+                            <h3 class="product-name">{{ producto[0] }}</h3>
+                            <h4 class="product-price">S/. {{ producto[1] }}</h4>
+                            <h4 class="product-offer">0%</h4>
+                            <p class="product-quantity">Cantidad: <input value="1" name="">
+                            <p class="product-remove">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                <span class="remove">Quitar</span>
+                            </p>
+                        </div>
                     </div>
-                </div>
-
-                <div class="product">
-                    <img src="{{ url_for('static', filename='img_productos/camara.jpg') }}">
-                    
-                    <div class="product-info">
-                        <h3 class="product-name">Cámara Streamer</h3>
-                        <h4 class="product-price">S/. 150</h4>
-                        <h4 class="product-offer">0%</h4>
-                        <p class="product-quantity">Cantidad: <input value="1" name="">
-                        <p class="product-remove">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                            <span class="remove">Quitar</span>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="product">
-                    <img src="{{ url_for('static', filename='img_productos/laptop.jpg') }}">
-                    <div class="product-info">
-                        <h3 class="product-name">Laptop HP</h3>
-                        <h4 class="product-price">S/. 2500</h4>
-                        <h4 class="product-offer">0%</h4>
-                        <p class="product-quantity">Cantidad: <input value="1" name="">
-                        <p class="product-remove">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                            <span class="remove">Quitar</span>
-                        </p>
-                    </div>
-                </div>
-
-
+                {% endfor %}
             </div>
+
         <div class="cart-total">
             <p>
                 <span>Precio Total</span>
@@ -79,6 +69,7 @@
             </p>
             
             <a href="#">Ir a Pagar</a>
+        </div>
         </div>
     </div>
     
