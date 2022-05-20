@@ -2,6 +2,7 @@
 {% extends "layout.html" %}
 
 {% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 
@@ -10,7 +11,9 @@
       
       <hr></hr>
       <h2>   </h2>
-      <h1>Llena tu carrito del mejor Hardware</h1><br><br>
+      <br>
+      <br>
+      <u><h1>Llena tu carrito del mejor Hardware</h1></u><br><br>
 
       
       <img width="280px" alt="laptop" src="{{ url_for('static', filename='img_productos/laptop.jpg') }}">
@@ -52,6 +55,18 @@
           <input type="button" value="   MICROFONO HYPERX QUADCAST   ">
         </a>
       </form><br>
-    </div>
+    <section class="form-register-products">
+      <h4>Formulario de Registro de Productos</h4>
+      <p> Aqui puedes ingresar tus propios productos!! </p>
+      <input class="controls" type="text" name="nombre" id="nombre" placeholders="Ingrese el nombre del producto">
+      <input class="controls" type="text" name="precio" id="precio" placeholders="Ingrese el precio del producto">
+      <input class="controls" type="text" name="descripcion" id="descripcion" placeholders="Ingrese la descripcion del producto">
+      
+      <input class="botons" type="submit" value="Registrar">
 
+    </section>
+    <br>
+    <br>
+    <br>
+  </div>
 {% endblock %}
