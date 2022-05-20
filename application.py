@@ -8,8 +8,8 @@ app.secret_key = 'super secret' # uso de alert
 
 all_productos = [["AUDIFONOS RAZER KRAKEN KITTY",4500.99,"audifonos"],
 			["CÁMARA LOGITECH C920",789.99,"camara"],
-			["LAPTOP HP CORE I5",1234.99,"laptop"],
-			["IPHONE 13 PRO MAX",23129.99,"iphone"],
+			["LAPTOP HP CORE I5",15000.99,"laptop"],
+			["IPHONE 13 PRO MAX",5999.99,"iphone"],
 			["MICROFONO HYPERX QUADCAST",5589.99,"microfono"]]
 
 
