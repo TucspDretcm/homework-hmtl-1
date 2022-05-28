@@ -2,6 +2,13 @@
 
 from flask import Flask, render_template, request, redirect, url_for, flash
 import json
+import templates.algoritmo_simetrico_por_series as AlgAbs
+
+import MySQLdb
+myConnection = MySQLdb.connect( host="localhost", user="root", passwd="root", db="testdatabase")
+myConnection.close()
+
+
 
 app = Flask(__name__)
 app.secret_key = 'super secret' # uso de alert
@@ -67,7 +74,7 @@ def newUser():
 			if db["user"] == user:
 				flash("The account name alredy exist.")
 				return redirect("register")
-		save_data(user, password)
+		save_data(user, AlgAbs.cifrado(password))
 		return render_template("login.html")
 	return redirect("register")   # redireciona a la ruta "../register"
 
@@ -75,10 +82,10 @@ def newUser():
 @app.route("/bienvenido", methods=["POST"])
 def validateUser():
 	user = request.form.get("user")
-	password = request.form.get("password")
+	password = AlgAbs.cifrado(request.form.get("password"))
 
 	for db in get_data():
-		if db["user"] == user and db["password"]==password:
+		if db["user"] == user and db["password"] == password:
 			global user_name
 			user_name = user
 			return render_template("bienvenido.html", name=user)
