@@ -1,0 +1,74 @@
+<!--Pantalla Principal (productos)-->
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+
+{% block body %}
+    <div class="p" align="center">
+      
+      <hr></hr>
+      <h2>   </h2>
+      <br>
+      <br>
+      <u><h1>Llena tu carrito del mejor Hardware</h1></u><br><br>
+
+      
+      <img width="280px" alt="laptop" src="{{ url_for('static', filename='img_productos/laptop.jpg') }}">
+      <br>
+      <form>
+        <a href="/pantalla_principal/laptop">
+          <input type="button" value="   LAPTOP HP CORE I5   ">
+        </a>
+      </form><br>
+
+      <img width="280px" alt="iphone" src="{{ url_for('static', filename='img_productos/iphone.jpg') }}">
+      <br>
+      <form>
+        <a href="/pantalla_principal/iphone">
+          <input type="button" value="   IPHONE 13 PRO MAX   ">
+        </a>
+      </form><br>
+
+      <img width="280px" alt="audifonos" src="{{ url_for('static', filename='img_productos/audifonos.jpg') }}">
+      <br>
+      <form>
+        <a href="/pantalla_principal/audifonos">
+          <input type="button" value="   AUDIFONOS RAZER KRAKEN KITTY   ">
+        </a>
+      </form><br>
+
+      <img width="280px" alt="camara" src="{{ url_for('static', filename='img_productos/camara.jpg') }}">
+      <br>
+      <form>
+        <a href="/pantalla_principal/camara">
+          <input type="button" value="   CÁMARA LOGITECH C920   ">
+        </a>
+      </form><br>
+
+      <img width="280px" alt="microfono" src="{{ url_for('static', filename='img_productos/microfono.jpg') }}">
+      <br>
+      <form>
+        <a href="/pantalla_principal/microfono">
+          <input type="button" value="   MICROFONO HYPERX QUADCAST   ">
+        </a>
+      </form><br>
+    <section class="form-register-products">
+      <h4>Formulario de Registro de Productos</h4>
+      <p> Aqui puedes ingresar tus propios productos!! </p>
+      <input class="controls" type="text" name="nombre" id="nombre" placeholders="Ingrese el nombre del producto">
+      <input class="controls" type="text" name="precio" id="precio" placeholders="Ingrese el precio del producto">
+      <input class="controls" type="text" name="descripcion" id="descripcion" placeholders="Ingrese la descripcion del producto">
+      
+      <p>
+      <input class="botons" type="submit" value="Registrar">
+      </p>
+
+    </section>
+    <br>
+    <br>
+    <br>
+  </div>
+{% endblock %}

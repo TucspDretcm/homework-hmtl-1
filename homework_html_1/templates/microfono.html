@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block head %}
+        <title>Microfono HyperX QuadCast</title>
+{% endblock%}
+
+
+{% block body %}
+        <br>
+        <br>
+        <br>
+        <div align="center">
+
+        <img width="340px" alt="microfono" src="{{ url_for('static', filename='img_productos/microfono.jpg') }}">
+        <h1>{{nombre}}</h1>
+        <h2>S/. {{precio}}</h2>
+        <h2>Caracteristicas</h2>
+        <li>Efectos de iluminacion RGB dinámicos personalizables</li>
+        <li>Suspensión elástica antivibración</li>
+        <li>Sensor de silenciamiento con indicador LED</li>
+        <li>Filtro antipop interno</li>
+        <li>Compatibilidad con múltiples dispositivos y programas</li>
+        <br>
+        <form action="{{ url_for('send_car')}}" method="post">
+            <input type="submit" value="AGREGAR AL CARRITO"><br>
+            <input type="text" value="4" name="object" style="visibility: hidden;">
+        </form>
+        </div>
+        <br>
+        <br>
+        <br>
+{% endblock %}
+

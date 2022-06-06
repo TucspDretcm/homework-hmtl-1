@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block head %}
+        <title>Iphone 13 pro max</title>
+{% endblock%}
+
+
+{% block body %}
+        <br>
+        <br>
+        <br>
+        <div align="center">
+
+        <img width="340px" alt="iphone" src="{{ url_for('static', filename='img_productos/iphone.jpg') }}">
+        <h1>{{nombre}}</h1>
+        <h2>S/. {{precio}}</h2>
+        <h2>Caracteristicas</h2>
+        <li>Chip A15 Bionic</li>
+        <li>Pantalla OLED de 6.7 pulgadas</li>
+        <li>Carga inalambrica hasta 15 W</li>
+        <li>Versiones de 128GB, 256GB y 512GB</li>
+        <li>iOS 15</li>
+        <br>
+        <form action="{{ url_for('send_car')}}" method="post">
+            <input type="submit" value="AGREGAR AL CARRITO"><br>
+            <input type="text" value="3" name="object" style="visibility: hidden;">
+        </form>
+
+        </div>
+        <br>
+        <br>
+        <br>    
+{% endblock%}
