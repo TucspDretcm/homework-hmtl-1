@@ -1,7 +1,6 @@
 # Grupo Amazon
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-import json
 import templates.algoritmo_simetrico_por_series as AlgAbs
 
 # https://www.geeksforgeeks.org/profile-application-using-python-flask-and-mysql/
