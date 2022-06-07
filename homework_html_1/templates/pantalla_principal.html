@@ -7,6 +7,12 @@
 
 
 {% block body %}
+    {% for message in get_flashed_messages() %}
+      <script type="text/javascript">
+        var msg = "El producto ya existe en la base de datos :)";
+        alert(msg);
+      </script>
+    {% endfor %}
     <div class="p" align="center">
       
       <hr></hr>
@@ -55,20 +61,30 @@
           <input type="button" value="   MICROFONO HYPERX QUADCAST   ">
         </a>
       </form><br>
-    <section class="form-register-products">
-      <h4>Formulario de Registro de Productos</h4>
-      <p> Aqui puedes ingresar tus propios productos!! </p>
-      <input class="controls" type="text" name="nombre" id="nombre" placeholders="Ingrese el nombre del producto">
-      <input class="controls" type="text" name="precio" id="precio" placeholders="Ingrese el precio del producto">
-      <input class="controls" type="text" name="descripcion" id="descripcion" placeholders="Ingrese la descripcion del producto">
-      
-      <p>
-      <input class="botons" type="submit" value="Registrar">
-      </p>
 
-    </section>
+    {% if dominio == 'amaxon' %}
+      <section class="form-register-products">
+        <h4>Formulario de Registro de Productos</h4>
+        <p> Aqui puedes ingresar tus propios productos!! </p>
+
+        <form action="{{ url_for('newProduct')}}" method="post">
+          <input class="controls" type="text" name="producto" id="nombre" placeholders="Ingrese el nombre del producto">
+          <input class="controls" type="text" name="precio" id="precio" placeholders="Ingrese el precio del producto">
+          <input class="controls" type="text" name="imagen" id="descripcion" placeholders="Ingrese el nombre de la imagen(img.jpg, img.png)">
+          <p>
+          <input class="botons" type="submit" value="Registrar">
+          </p>
+        </form>
+      </section>
+
+    <br>
+    <a href="mysql_preview"><input class="botons" type="button" value="Data Base Show"></a>
+
+    {% endif %}
+
     <br>
     <br>
     <br>
+  </div>
   </div>
 {% endblock %}

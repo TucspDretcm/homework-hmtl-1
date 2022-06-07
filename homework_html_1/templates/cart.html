@@ -19,24 +19,10 @@
 
                 {% for producto in productos %}
                     <div class="product">
-                        {% if producto[2] == 'audifonos' %}
-                            <img src="{{ url_for('static', filename='img_productos/audifonos.jpg') }}">
-                        {% endif %}
-                        {% if producto[2] == 'camara' %}
-                            <img src="{{ url_for('static', filename='img_productos/camara.jpg') }}">
-                        {% endif %}
-                        {% if producto[2] == 'microfono' %}
-                            <img src="{{ url_for('static', filename='img_productos/microfono.jpg') }}">
-                        {% endif %}
-                        {% if producto[2] == 'laptop' %}
-                            <img src="{{ url_for('static', filename='img_productos/laptop.jpg') }}">
-                        {% endif %}
-                        {% if producto[2] == 'iphone' %}
-                            <img src="{{ url_for('static', filename='img_productos/iphone.jpg') }}">
-                        {% endif %}
+                        <img src="{{ url_for('static', filename='img_productos/')}}{{ producto['imagen'] }}">
                         <div class="product-info">
-                            <h3 class="product-name">{{ producto[0] }}</h3>
-                            <h4 class="product-price">S/. {{ producto[1] }}</h4>
+                            <h3 class="product-name">{{ producto["producto"] }}</h3>
+                            <h4 class="product-price">S/. {{  producto["precio"] }}</h4>
                             <h4 class="product-offer">0%</h4>
                             <p class="product-quantity">Cantidad: <input value="1" name="">
                             <p class="product-remove">
@@ -55,7 +41,7 @@
             </p>
             <p>
                 <span>Cantidad de Productos</span>
-                <span>3</span>
+                <span>7</span>
             </p>
 
             <!--Descuento si se puso en las clases product-offer-->

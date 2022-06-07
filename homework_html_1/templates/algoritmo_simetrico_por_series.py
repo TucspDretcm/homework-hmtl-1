@@ -69,4 +69,5 @@ if __name__ == "__main__":
             )
         )
 
-    mensaje = input("Ingrese mensaje: ")
+    mensaje = "okmister"
+    print(mensaje,cifrado(mensaje), descifrado(cifrado(mensaje)))

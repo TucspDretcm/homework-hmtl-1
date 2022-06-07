@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block head%}{% endblock %}
+
+{% block body %}
+<br>
+<h4>Users Table:</h4>
+<ul>
+  {% for i in A %}
+  <li>{{ i }}</li>
+  {% endfor %}
+</ul>
+<br>
+
+<h4>Products Table:</h4>
+<ul>
+  {% for i in B %}
+  <li>{{ i }}</li>
+  {% endfor %}
+</ul>
+<br>
+
+<h4>Carrito Table:</h4>
+<ul>
+  {% for i in C %}
+  <li>{{ i }}</li>
+  {% endfor %}
+</ul>
+<br>
+{% endblock %}

@@ -1,59 +1,33 @@
 # Grupo Amazon
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import json
 import templates.algoritmo_simetrico_por_series as AlgAbs
+
+# https://www.geeksforgeeks.org/profile-application-using-python-flask-and-mysql/
+from flask_mysqldb import MySQL
+import MySQLdb.cursors
 
 app = Flask(__name__)
 app.secret_key = "super secret"  # uso de alert
 
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = 'TestDataBase'
+  
+  
+mysql = MySQL(app)
+
+
 all_productos = [
-    ["AUDIFONOS RAZER KRAKEN KITTY", 700, "audifonos"],
+    ["AUDIFONOS RAZER KRAKEN KITTY", 700.0, "audifonos.jpg"],
     ["CÁMARA LOGITECH C920", 399, "camara"],
     ["LAPTOP HP CORE I5", 2099, "laptop"],
     ["IPHONE 13 PRO MAX", 6699, "iphone"],
     ["MICROFONO HYPERX QUADCAST", 599, "microfono"],
 ]
-
-global user_name
-user_name = ""
-
-
-def get_data():
-    try:
-        with open("database.json", "r") as f:
-            database = json.load(f)
-    except:
-        database = []
-        with open("database.json", "w") as f:
-            json.dump(database, f)
-
-    return database
-
-
-def save_data(a, b):
-    try:
-        with open("database.json", "r+") as f:
-            db = json.load(f)
-            db.append({"user": a, "password": b, "products": []})
-            f.seek(0)
-            json.dump(db, f)
-    except:
-        database = []
-        with open("database.json", "w") as f:
-            json.dump(database, f)
-        save_data(a, b)
-
-
-def save_product(a):
-    with open("database.json", "r+") as f:
-        db = json.load(f)
-        for data in db:
-            if data["user"] == user_name:
-                data["products"].append(a)
-                break
-        f.seek(0)
-        json.dump(db, f)
 
 
 @app.route("/")
@@ -68,12 +42,22 @@ def newUser():
     password_2 = request.form.get("password_2")
 
     if password == password_2 and user != None and password != None:
-        for db in get_data():
-            if db["user"] == user:
-                flash("The account name alredy exist.")
-                return redirect("register")
-        save_data(user, AlgAbs.cifrado(password))
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        try:
+            cursor.execute(f"SELECT * FROM Users WHERE username='{user}'")
+            if cursor.fetchone():
+                    flash("The account name alredy exist. call to javascript alert(...)")
+                    return redirect("register")
+        except:
+            cursor.execute("CREATE TABLE Users (user_ID int PRIMARY KEY AUTO_INCREMENT, username VARCHAR(50), password VARCHAR(50))")
+            mysql.connection.commit()
+
+        cursor.execute('INSERT INTO Users (username, password) VALUES (% s, % s)', ( user, AlgAbs.cifrado(password) ) )
+        mysql.connection.commit()
         return render_template("login.html")
+
     return redirect("register")  # redireciona a la ruta "../register"
 
 
@@ -82,79 +66,119 @@ def validateUser():
     user = request.form.get("user")
     password = AlgAbs.cifrado(request.form.get("password"))
 
-    for db in get_data():
-        if db["user"] == user and db["password"] == password:
-            global user_name
-            user_name = user
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        cursor.execute(f"SELECT * FROM Users WHERE username='{user}' AND password='{password}'")
+        account = cursor.fetchone()
+        if account:
+            # global user_name
+            # user_name = user
+            session['loggedin'] = True
+            session['id'] = account['user_ID']
+            session['username'] = account['username']
             return render_template("bienvenido.html", name=user)
+    except:
+        return redirect("login")
 
     return redirect("login")
+
+@app.route("/pantalla_principal", methods=["POST"])
+def newProduct():
+    producto = request.form.get("producto")
+    precio = float(request.form.get("precio"))
+    imagen = request.form.get("imagen")
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        cursor.execute(f"SELECT * FROM Products WHERE producto='{producto}'")
+        if cursor.fetchone():
+            flash("alert javascript etc")
+            return redirect("pantalla_principal")
+    except:
+        cursor.execute("CREATE TABLE Products (product_ID int PRIMARY KEY AUTO_INCREMENT, producto VARCHAR(50), precio FLOAT,imagen VARCHAR(50))")
+
+    cursor.execute(f"INSERT INTO Products (producto, precio, imagen) VALUES ( '{producto}', '{precio}', '{imagen}')")
+    mysql.connection.commit()
+
+    return redirect("pantalla_principal")
 
 
 @app.route("/cart", methods=["POST"])
 def send_car():
-    if user_name == "":
+    if 'loggedin' not in session:
         return redirect("login")
+
     ob = int(request.form.get("object"))
-    for data in get_data():
-        if data["user"] == user_name and ob in data["products"]:
-            return redirect("cart")
-    save_product(ob)
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        cursor.execute(f"SELECT * FROM Carrito WHERE user_ID='{session['id']}' AND product_ID='{ob}'")
+        if cursor.fetchone():
+            cursor.execute(f"UPDATE Carrito SET cantidad=cantidad+1 WHERE user_ID='{session['id']}' AND product_ID='{ob}'")
+        else:
+            cursor.execute(f"INSERT INTO Carrito (user_ID, product_ID, cantidad) VALUES ( '{session['id']}', '{ob}', '{1}')")    
+        mysql.connection.commit()
+    except:
+        cursor.execute("CREATE TABLE Carrito (user_ID int, product_ID int, cantidad int)")
+        cursor.execute(f"INSERT INTO Carrito (user_ID, product_ID, cantidad) VALUES ( '{session['id']}', '{ob}', '{1}')")
+        mysql.connection.commit()
+
     return redirect("cart")
 
 
 @app.route("/login")
 def login_render():
-    global user_name
-    user_name = ""
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
     return render_template("login.html")
 
 
 @app.route("/register")
 def register_render():
-    global user_name
-    user_name = ""
     return render_template("register.html")
 
 
 @app.route("/pantalla_principal")
 def pantalla_render():
-    return render_template("pantalla_principal.html")
+    return render_template("pantalla_principal.html", dominio=session["username"])
 
 
 @app.route("/pantalla_principal/microfono")
 def render_microfono():
     return render_template(
         "microfono.html", precio=all_productos[4][1], nombre=all_productos[4][0]
-    )
+        )
 
 
 @app.route("/pantalla_principal/camara")
 def render_camara():
     return render_template(
         "camara.html", precio=all_productos[1][1], nombre=all_productos[1][0]
-    )
+        )
 
 
 @app.route("/pantalla_principal/audifonos")
 def render_audifonos():
     return render_template(
         "audifonos.html", precio=all_productos[0][1], nombre=all_productos[0][0]
-    )
+        )
 
 
 @app.route("/pantalla_principal/iphone")
 def render_iphone():
     return render_template(
         "iphone.html", precio=all_productos[3][1], nombre=all_productos[3][0]
-    )
+        )
 
 
 @app.route("/pantalla_principal/laptop")
 def render_laptop():
     return render_template(
         "laptop.html", precio=all_productos[2][1], nombre=all_productos[2][0]
-    )
+        )
 
 
 @app.route("/info")
@@ -164,21 +188,38 @@ def info_render():
 
 @app.route("/forum")
 def forum_render():
+    if "loggedin" not in session:
+        return redirect("login")
     return render_template("forum.html")
 
 
 @app.route("/cart")
 def carrito_render():
-    if user_name == "":
+    if "loggedin" not in session:
         return redirect("login")
-    productos = []
-    for data in get_data():
-        if data["user"] == user_name:
-            for i in data["products"]:
-                productos.append(all_productos[i])
-    return render_template("cart.html", productos=productos)
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        cursor.execute(f"""SELECT pr.producto, pr.precio, pr.imagen 
+            FROM Products pr, Carrito cr
+            WHERE cr.user_ID='{session['id']}' AND pr.product_ID=cr.product_ID""")
+
+    except Exception as e:
+        print("\n\n\n",e,"\n\n\n")
+        return render_template("cart.html")
+
+    return render_template("cart.html", productos=cursor.fetchall())
 
 
-@app.route("/users")
+@app.route("/mysql_preview")
 def show_all_data():
-    return render_template("users.html", db=get_data())
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM Users")
+    A = cursor.fetchall()
+    cursor.execute("SELECT * FROM Products")
+    B = cursor.fetchall()
+    cursor.execute("SELECT * FROM Carrito")
+    C = cursor.fetchall() 
+
+    return render_template("mysql_preview.html", A=A, B=B, C=C)
