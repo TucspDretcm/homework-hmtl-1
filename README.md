@@ -10,3 +10,5 @@
 (DBP_venv) C:\Users\USUARIO\Desktop\proyecto_basado>pip install ipython
 (DBP_venv) C:\Users\USUARIO\Desktop\proyecto_basado>pip install flask_mysqldb
 ```
+
+https://www.geeksforgeeks.org/profile-application-using-python-flask-and-mysql/
