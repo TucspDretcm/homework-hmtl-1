@@ -8,6 +8,7 @@ authors = ["PorGabo <gabrielrodriguezpostigo@gmail.com>"]
 python = "^3.10"
 Flask = "2.0.1"
 pymongo = "3.5.1"
+Flask-MySQLdb = "1.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
