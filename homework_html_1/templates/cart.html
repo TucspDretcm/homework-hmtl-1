@@ -24,7 +24,7 @@
                             <h3 class="product-name">{{ producto["producto"] }}</h3>
                             <h4 class="product-price">S/. {{  producto["precio"] }}</h4>
                             <h4 class="product-offer">0%</h4>
-                            <p class="product-quantity">Cantidad: <input value="1" name="">
+                            <p class="product-quantity"><b>Cantidad:</b> <input value="{{ producto['cantidad'] }}"></p>
                             <p class="product-remove">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                 <span class="remove">Quitar</span>
@@ -37,11 +37,11 @@
         <div class="cart-total">
             <p>
                 <span>Precio Total</span>
-                <span>S/. 2850</span>
+                <span>S/. {{ total }}</span>
             </p>
             <p>
                 <span>Cantidad de Productos</span>
-                <span>7</span>
+                <span>{{ cantidad }}</span>
             </p>
 
             <!--Descuento si se puso en las clases product-offer-->

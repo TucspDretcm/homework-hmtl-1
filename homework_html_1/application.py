@@ -14,7 +14,7 @@ app.secret_key = "super secret"  # uso de alert
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'TestDataBase'
+app.config['MYSQL_DB'] = 'dbp'
   
   
 mysql = MySQL(app)
@@ -126,6 +126,24 @@ def send_car():
 
     return redirect("cart")
 
+@app.route("/forum", methods=["POST"])
+def newComment():
+    if 'loggedin' not in session:
+        return redirect("login")
+
+    comment = request.form.get("comment")
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        cursor.execute(f"INSERT INTO Comments (user_ID, comment) VALUES ( '{session['id']}', '{comment}')")    
+        mysql.connection.commit()
+    except:
+        cursor.execute("CREATE TABLE Comments (user_ID int, comment VARCHAR(250))")
+        cursor.execute(f"INSERT INTO Comments (user_ID, comment) VALUES ( '{session['id']}', '{comment}')")    
+        mysql.connection.commit()
+
+    return redirect("forum")
+
 
 @app.route("/login")
 def login_render():
@@ -189,7 +207,17 @@ def info_render():
 def forum_render():
     if "loggedin" not in session:
         return redirect("login")
-    return render_template("forum.html")
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        cursor.execute(f"""SELECT us.username, cm.comment 
+            FROM Users us, Comments cm
+            WHERE us.user_ID = cm.user_ID""")
+    except:
+        return render_template("forum.html",comments=[])
+
+    return render_template("forum.html", comments=cursor.fetchall())
 
 
 @app.route("/cart")
@@ -200,15 +228,18 @@ def carrito_render():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
     try:
-        cursor.execute(f"""SELECT pr.producto, pr.precio, pr.imagen 
+        cursor.execute(f"""SELECT pr.producto, pr.precio, pr.imagen, cr.cantidad 
             FROM Products pr, Carrito cr
             WHERE cr.user_ID='{session['id']}' AND pr.product_ID=cr.product_ID""")
+        productos = cursor.fetchall()
+        total, con = 0, 0
+        for p in productos:
+            total += p['precio'] * p['cantidad']
+            con += p['cantidad']
+    except:
+        return render_template("cart.html",productos=[], total=0.0, cantidad=0)
 
-    except Exception as e:
-        print("\n\n\n",e,"\n\n\n")
-        return render_template("cart.html")
-
-    return render_template("cart.html", productos=cursor.fetchall())
+    return render_template("cart.html", productos=productos, total=float(total), cantidad=con)
 
 
 @app.route("/mysql_preview")

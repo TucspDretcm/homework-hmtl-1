@@ -1,19 +1,8 @@
 {% extends "layout.html" %}
 
 {% block head %}
-{% endblock%}
-
-{% block body %}
-		<img src="{{ url_for('static', filename='imagenes/soporte.jpg')}}" alt="soporte" width="50%" height="50%">
-
-		
-		<H1>Nos encanta tener una opinión de nuestros clientes, por lo que, <br>
-		agradeceríamos cualquier duda o reclamo.Escribelo en el foro.<br>
-		Estamos pendientes a cualquier observación.<br></H1>
-
-		<H2>Amaxon.</H2><br>
-
-		<script>
+        <script>
+            /*
             document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector("#b_submit").disabled = true;
                 document.querySelector("#task").onkeyup = () => {
@@ -35,22 +24,58 @@
                 };
 
             });
+            */
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelector("#b_submit").disabled = true;
+                document.querySelector("#task").onkeyup = () => {
+                    if (document.querySelector("#task").value.length > 0 && document.querySelector("#task").value.length < 251)
+                        document.querySelector("#b_submit").disabled = false;
+                    else
+                        document.querySelector("#b_submit").disabled = true;
+                }
+            });
         </script>
         <title>Forum</title>
-    </head>
-    <body>
-		
-        <h1>Pon tu opinión aquí:</h1>
-        <ul id="tasks">
-        </ul>
-        <form id="new-task">
-            <input id="task" autocomplete="off" autofocus placeholder="Opinión" type="text">
-            <input id="b_submit" type="submit">
+        <style type="text/css">
+            .botton {
+                margin: 2em;
+            }
+            .comment {
+                font-size: 1em;
+            }
+            .top{
+                background-color: #999;
+            }
+        </style>
+{% endblock%}
+
+{% block body %}
+    <div class="top">
+    <center>
+        <br>
+		<img src="{{ url_for('static', filename='imagenes/soporte.jpg')}}" alt="soporte" width="20%" height="20%">
+
+		<H2> Nos encanta tener una opinión de nuestros clientes, por lo que, agradeceríamos cualquier duda o reclamo.Escribelo en el foro. Estamos pendientes a cualquier observación.<br> Amaxon.</H2><br>
+    </center>
+    </div>
+	
+    <div class="botton">
+        <h4> PON TU COMENTARIO AQUÍ:</h4>
+
+        <form id="new-task" action="{{ url_for('newComment')}}" method="post">
+            <input id="task" autocomplete="off" autofocus placeholder="Opinión" type="text" name="comment">
+            <input id="b_submit" type="submit" value="Publicar">
         </form>
-    </body>
-	<br>
-    <hr /> 
-	<h3> COMENTARIOS </h3>
-	<br><br>
+
+    	<br>
+    	<h4> COMENTARIOS: </h4>
+    	<br>
+        <ul>
+        {% for comment in comments %}
+            <li class="comment"> <b>{{ comment['username'] }}:</b> {{ comment['comment'] }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    <br>
 
 {% endblock %}
