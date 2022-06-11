@@ -18,6 +18,7 @@ app.config['MYSQL_DB'] = 'dbp'
   
   
 mysql = MySQL(app)
+AccountAdministration = "amaxon"
 
 
 @app.route("/")
@@ -172,7 +173,7 @@ def pantalla_render():
     except:
         return render_template("pantalla_principal.html",dominio=session["username"], productos=[])
 
-    return render_template("pantalla_principal.html", dominio=session["username"], productos=productos)
+    return render_template("pantalla_principal.html", dominio=session["username"], productos=productos, admi=AccountAdministration)
 
 
 @app.route("/pantalla_principal/<int:id_p>")
@@ -190,6 +191,21 @@ def productos_info(id_p):
         return render_template("productos_link.html", producto={"producto":None, "imagen":None,"precio":None, "descripcion":None}, descrip=[])
 
     return render_template("productos_link.html", producto=producto, descrip=descrip)
+
+
+@app.route("/pantalla_principal/set/<int:id_p>")
+def productos_set(id_p):
+    if "loggedin" not in session:
+        return redirect("../../login")
+
+    return f"setting element with id {id_p}"
+
+
+@app.route("/pantalla_principal/del/<int:id_p>")
+def productos_del(id_p):
+    if "loggedin" not in session:
+        return redirect("../../login")
+    return f"deleting element with id {id_p}"
 
 
 @app.route("/info")
@@ -238,7 +254,7 @@ def carrito_render():
 @app.route("/cart/pay_cart")
 def all_cart():
     if "loggedin" not in session:
-        return redirect("login")
+        return redirect("../login")
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
@@ -252,7 +268,7 @@ def all_cart():
 @app.route("/cart/<int:id_p>")
 def delete_product_car(id_p):
     if "loggedin" not in session:
-        return redirect("login")
+        return redirect("../login")
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}' AND product_ID='{id_p}'")

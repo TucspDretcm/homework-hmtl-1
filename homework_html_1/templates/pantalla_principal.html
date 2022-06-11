@@ -3,6 +3,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<title>Amaxon</title>
 {% endblock %}
 
 
@@ -23,16 +24,26 @@
 
       {% for producto in productos %}
         <br>
+        <br>
         <img width="280px" alt="laptop" src="{{ url_for('static', filename='img_productos/') }}{{ producto['imagen'] }}">
         <br>
+        <br>
         <form>
-          <a href="/pantalla_principal/{{ producto['product_ID'] }}">
+          <a href="/pantalla_principal/{{ producto['product_ID'] }}" style="text-decoration: none;">
             <input type="button" value="{{ producto['producto'] }}">
           </a>
+          {% if dominio == admi %}
+            <a href="/pantalla_principal/set/{{ producto['product_ID'] }}" style="text-decoration: none;">
+              <input type="button" value=" Set Product ">
+            </a>
+            <a href="/pantalla_principal/del/{{ producto['product_ID'] }}" style="text-decoration: none;">
+              <input type="button" value=" Delete ">
+            </a>
+          {% endif %}
         </form>
       {% endfor %}
 
-    {% if dominio == 'amaxon' %}
+    {% if dominio == admi %}
       <section class="form-register-products">
         <h4>Formulario de Registro de Productos</h4>
         <p> Aqui puedes ingresar tus propios productos!! </p>
