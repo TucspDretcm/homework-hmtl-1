@@ -25,10 +25,10 @@
                             <h4 class="product-price">S/. {{  producto["precio"] }}</h4>
                             <h4 class="product-offer">0%</h4>
                             <p class="product-quantity"><b>Cantidad:</b> <input value="{{ producto['cantidad'] }}"></p>
-                            <p class="product-remove">
+                            <a href="/cart/{{producto['product_ID']}}"><p class="product-remove">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                 <span class="remove">Quitar</span>
-                            </p>
+                            </p></a>
                         </div>
                     </div>
                 {% endfor %}
@@ -50,7 +50,7 @@
                 <span>S/. 0</span>
             </p>
             
-            <a href="/pay_cart" name="pay">Ir a Pagar</a>
+            <a href="/cart/pay_cart" name="pay">Ir a Pagar</a>
 
         </div>
         </div>

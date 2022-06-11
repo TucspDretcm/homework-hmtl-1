@@ -222,7 +222,7 @@ def carrito_render():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
     try:
-        cursor.execute(f"""SELECT pr.producto, pr.precio, pr.imagen, cr.cantidad 
+        cursor.execute(f"""SELECT pr.product_ID, pr.producto, pr.precio, pr.imagen, cr.cantidad 
             FROM Products pr, Carrito cr
             WHERE cr.user_ID='{session['id']}' AND pr.product_ID=cr.product_ID""")
         productos = cursor.fetchall()
@@ -235,17 +235,29 @@ def carrito_render():
 
     return render_template("cart.html", productos=productos, total=float(total), cantidad=con)
 
-@app.route("/pay_cart")
+@app.route("/cart/pay_cart")
 def all_cart():
     if "loggedin" not in session:
         return redirect("login")
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}'")
+
+    cursor.execute("show tables like 'carrito'")
+    if cursor.fetchall():
+        cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}'")
+        mysql.connection.commit()
+
+    return redirect("../cart")
+
+@app.route("/cart/<int:id_p>")
+def delete_product_car(id_p):
+    if "loggedin" not in session:
+        return redirect("login")
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}' AND product_ID='{id_p}'")
     mysql.connection.commit()
-
-    return redirect("cart")
-
+    return redirect("../cart")
 
 
 @app.route("/mysql_preview")
