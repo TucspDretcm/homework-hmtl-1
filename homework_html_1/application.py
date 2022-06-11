@@ -20,15 +20,6 @@ app.config['MYSQL_DB'] = 'dbp'
 mysql = MySQL(app)
 
 
-all_productos = [
-    ["AUDIFONOS RAZER KRAKEN KITTY", 700.0, "audifonos.jpg"],
-    ["CÁMARA LOGITECH C920", 399, "camara"],
-    ["LAPTOP HP CORE I5", 2099, "laptop"],
-    ["IPHONE 13 PRO MAX", 6699, "iphone"],
-    ["MICROFONO HYPERX QUADCAST", 599, "microfono"],
-]
-
-
 @app.route("/")
 def index():
     return render_template("login.html")
@@ -85,8 +76,17 @@ def validateUser():
 @app.route("/pantalla_principal", methods=["POST"])
 def newProduct():
     producto = request.form.get("producto")
-    precio = float(request.form.get("precio"))
+
+    precio = request.form.get("precio")
+    try:
+        precio = float(precio)
+    except:
+        precio = 0.0
+
     imagen = request.form.get("imagen")
+    descrip = request.form.get("descripcion")
+    descrip = descrip.split("\n")
+    descrip = "/n".join(descrip)
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
@@ -96,9 +96,13 @@ def newProduct():
             flash("alert javascript etc")
             return redirect("pantalla_principal")
     except:
-        cursor.execute("CREATE TABLE Products (product_ID int PRIMARY KEY AUTO_INCREMENT, producto VARCHAR(50), precio FLOAT,imagen VARCHAR(50))")
+        cursor.execute("""CREATE TABLE Products 
+            (product_ID int PRIMARY KEY AUTO_INCREMENT, 
+            producto VARCHAR(50), precio FLOAT,
+            imagen VARCHAR(50),
+            descripcion VARCHAR(250))""")
 
-    cursor.execute(f"INSERT INTO Products (producto, precio, imagen) VALUES ( '{producto}', '{precio}', '{imagen}')")
+    cursor.execute(f"INSERT INTO Products (producto, precio, imagen, descripcion) VALUES ( '{producto}', '{precio}', '{imagen}', '{descrip}')")
     mysql.connection.commit()
 
     return redirect("pantalla_principal")
@@ -160,42 +164,32 @@ def register_render():
 
 @app.route("/pantalla_principal")
 def pantalla_render():
-    return render_template("pantalla_principal.html", dominio=session["username"])
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        cursor.execute(f"""SELECT pr.product_ID, pr.producto, pr.imagen FROM Products pr""")
+        productos = cursor.fetchall()
+    except:
+        return render_template("pantalla_principal.html",dominio=session["username"], productos=[])
+
+    return render_template("pantalla_principal.html", dominio=session["username"], productos=productos)
 
 
-@app.route("/pantalla_principal/microfono")
-def render_microfono():
-    return render_template(
-        "microfono.html", precio=all_productos[4][1], nombre=all_productos[4][0]
-        )
+@app.route("/pantalla_principal/<int:id_p>")
+def productos_info(id_p):
+    if "loggedin" not in session:
+        return redirect("login")
 
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-@app.route("/pantalla_principal/camara")
-def render_camara():
-    return render_template(
-        "camara.html", precio=all_productos[1][1], nombre=all_productos[1][0]
-        )
+    try:
+        cursor.execute(f"""SELECT * FROM Products WHERE product_ID={id_p}""")
+        producto = cursor.fetchone()
+        descrip = producto['descripcion'].split("/n")
+    except:
+        return render_template("productos_link.html", producto={"producto":None, "imagen":None,"precio":None, "descripcion":None}, descrip=[])
 
-
-@app.route("/pantalla_principal/audifonos")
-def render_audifonos():
-    return render_template(
-        "audifonos.html", precio=all_productos[0][1], nombre=all_productos[0][0]
-        )
-
-
-@app.route("/pantalla_principal/iphone")
-def render_iphone():
-    return render_template(
-        "iphone.html", precio=all_productos[3][1], nombre=all_productos[3][0]
-        )
-
-
-@app.route("/pantalla_principal/laptop")
-def render_laptop():
-    return render_template(
-        "laptop.html", precio=all_productos[2][1], nombre=all_productos[2][0]
-        )
+    return render_template("productos_link.html", producto=producto, descrip=descrip)
 
 
 @app.route("/info")

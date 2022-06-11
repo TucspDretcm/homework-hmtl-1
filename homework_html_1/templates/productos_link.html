@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block head %}
+        <title>{{ producto['producto'] }}</title>
+{% endblock%}
+
+
+{% block body %}
+        <br>
+        <br>
+        <br>
+        <div align="center">
+
+        <img width="340px" alt="laptop" src="{{ url_for('static', filename='img_productos/') }}{{ producto['imagen'] }}">
+        <h1>{{ producto['producto'] }}</h1>
+        <h2>S/. {{ producto['precio'] }}</h2>
+
+        <h2>Caracteristicas</h2>
+
+        <ul>
+        {% for line in descrip %}
+                <li>■ {{line}}</li>
+        {% endfor %}
+        </ul>
+        <br>
+        <form action="{{ url_for('send_car')}}" method="post">
+            <input type="submit" value="AGREGAR AL CARRITO"><br>
+            <input type="text" value="{{ producto['product_ID'] }}" name="object" style="visibility: hidden;">
+        </form>
+
+        </div>
+        <br>
+        <br>
+        <br>        
+{% endblock%}

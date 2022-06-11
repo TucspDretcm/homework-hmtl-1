@@ -21,46 +21,16 @@
       <br>
       <u><h1>Llena tu carrito del mejor Hardware</h1></u><br><br>
 
-      
-      <img width="280px" alt="laptop" src="{{ url_for('static', filename='img_productos/laptop.jpg') }}">
-      <br>
-      <form>
-        <a href="/pantalla_principal/laptop">
-          <input type="button" value="   LAPTOP HP CORE I5   ">
-        </a>
-      </form><br>
-
-      <img width="280px" alt="iphone" src="{{ url_for('static', filename='img_productos/iphone.jpg') }}">
-      <br>
-      <form>
-        <a href="/pantalla_principal/iphone">
-          <input type="button" value="   IPHONE 13 PRO MAX   ">
-        </a>
-      </form><br>
-
-      <img width="280px" alt="audifonos" src="{{ url_for('static', filename='img_productos/audifonos.jpg') }}">
-      <br>
-      <form>
-        <a href="/pantalla_principal/audifonos">
-          <input type="button" value="   AUDIFONOS RAZER KRAKEN KITTY   ">
-        </a>
-      </form><br>
-
-      <img width="280px" alt="camara" src="{{ url_for('static', filename='img_productos/camara.jpg') }}">
-      <br>
-      <form>
-        <a href="/pantalla_principal/camara">
-          <input type="button" value="   CÁMARA LOGITECH C920   ">
-        </a>
-      </form><br>
-
-      <img width="280px" alt="microfono" src="{{ url_for('static', filename='img_productos/microfono.jpg') }}">
-      <br>
-      <form>
-        <a href="/pantalla_principal/microfono">
-          <input type="button" value="   MICROFONO HYPERX QUADCAST   ">
-        </a>
-      </form><br>
+      {% for producto in productos %}
+        <br>
+        <img width="280px" alt="laptop" src="{{ url_for('static', filename='img_productos/') }}{{ producto['imagen'] }}">
+        <br>
+        <form>
+          <a href="/pantalla_principal/{{ producto['product_ID'] }}">
+            <input type="button" value="{{ producto['producto'] }}">
+          </a>
+        </form>
+      {% endfor %}
 
     {% if dominio == 'amaxon' %}
       <section class="form-register-products">
@@ -71,6 +41,7 @@
           <input class="controls" type="text" name="producto" id="nombre" placeholders="Ingrese el nombre del producto">
           <input class="controls" type="text" name="precio" id="precio" placeholders="Ingrese el precio del producto">
           <input class="controls" type="text" name="imagen" id="descripcion" placeholders="Ingrese el nombre de la imagen(img.jpg, img.png)">
+          <textarea placeholders="descripcion" name="descripcion"></textarea><br>
           <p>
           <input class="botons" type="submit" value="Registrar">
           </p>
