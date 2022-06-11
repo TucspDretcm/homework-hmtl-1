@@ -235,6 +235,18 @@ def carrito_render():
 
     return render_template("cart.html", productos=productos, total=float(total), cantidad=con)
 
+@app.route("/pay_cart")
+def all_cart():
+    if "loggedin" not in session:
+        return redirect("login")
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}'")
+    mysql.connection.commit()
+
+    return redirect("cart")
+
+
 
 @app.route("/mysql_preview")
 def show_all_data():

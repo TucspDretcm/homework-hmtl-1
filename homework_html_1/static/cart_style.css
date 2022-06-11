@@ -39,7 +39,7 @@
 {
     border: none;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    transform: scale (1.01);
+    transform: scale calc(1.01);
 }
 
 .product>img
