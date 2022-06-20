@@ -1,31 +1,31 @@
 # Grupo Amazon
 
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify#, session
 import templates.algoritmo_simetrico_por_series as AlgAbs
 
 # https://www.geeksforgeeks.org/profile-application-using-python-flask-and-mysql/
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
+from flask_cors import CORS
+import datetime
 
 app = Flask(__name__)
 app.secret_key = "super secret"  # uso de alert
-
+CORS(app)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = 'dbp'
-  
-  
+#app.config["USE_PERMANENT_SESSION"] = True
+
+
 mysql = MySQL(app)
 AccountAdministration = "amaxon"
 
+session = {}  # simulator or global variable of "Flask/session"
 
-@app.route("/")
-def index():
-    return render_template("login.html")
-
-
+'''
 @app.route("/login", methods=["POST"])
 def newUser():
     user = request.form.get("user")
@@ -50,30 +50,28 @@ def newUser():
         return render_template("login.html")
 
     return redirect("register")  # redireciona a la ruta "../register"
+'''
 
 
-@app.route("/bienvenido", methods=["POST"])
+@app.route("/validate_user", methods=["POST"])
 def validateUser():
-    user = request.form.get("user")
+    success = False
+    user = request.form.get("account")
     password = AlgAbs.cifrado(request.form.get("password"))
-
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    try:
+    cursor.execute("show tables like 'Users'")
+    if cursor.fetchall():
         cursor.execute(f"SELECT * FROM Users WHERE username='{user}' AND password='{password}'")
         account = cursor.fetchone()
         if account:
-            # global user_name
-            # user_name = user
             session['loggedin'] = True
             session['id'] = account['user_ID']
             session['username'] = account['username']
-            return render_template("bienvenido.html", name=user)
-    except:
-        return redirect("login")
+            success = True
+    return jsonify({'success':success})
 
-    return redirect("login")
-
+'''
 @app.route("/pantalla_principal", methods=["POST"])
 def newProduct():
     producto = request.form.get("producto")
@@ -128,7 +126,6 @@ def send_car():
         cursor.execute("CREATE TABLE Carrito (user_ID int, product_ID int, cantidad int)")
         cursor.execute(f"INSERT INTO Carrito (user_ID, product_ID, cantidad) VALUES ( '{session['id']}', '{ob}', '{1}')")
         mysql.connection.commit()
-
     return redirect("cart")
 
 @app.route("/forum", methods=["POST"])
@@ -156,11 +153,6 @@ def login_render():
     session.pop('id', None)
     session.pop('username', None)
     return render_template("login.html")
-
-
-@app.route("/register")
-def register_render():
-    return render_template("register.html")
 
 
 @app.route("/pantalla_principal")
@@ -208,11 +200,6 @@ def productos_del(id_p):
     return f"deleting element with id {id_p}"
 
 
-@app.route("/info")
-def info_render():
-    return render_template("info.html")
-
-
 @app.route("/forum")
 def forum_render():
     if "loggedin" not in session:
@@ -229,15 +216,19 @@ def forum_render():
 
     return render_template("forum.html", comments=cursor.fetchall())
 
-
-@app.route("/cart")
-def carrito_render():
+'''
+@app.route("/cart_loader", methods=["POST"])
+def cart_loader():
+    data = {'action':'vacio'}
     if "loggedin" not in session:
-        return redirect("login")
+         data['action'] = 'registrar'
+         return jsonify(data)
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-    try:
+    cursor.execute("show tables like 'carrito'")
+    carrito = cursor.fetchone()
+    cursor.execute("show tables like 'products'")
+    if cursor.fetchall() and carrito:
         cursor.execute(f"""SELECT pr.product_ID, pr.producto, pr.precio, pr.imagen, cr.cantidad 
             FROM Products pr, Carrito cr
             WHERE cr.user_ID='{session['id']}' AND pr.product_ID=cr.product_ID""")
@@ -246,35 +237,30 @@ def carrito_render():
         for p in productos:
             total += p['precio'] * p['cantidad']
             con += p['cantidad']
-    except:
-        return render_template("cart.html",productos=[], total=0.0, cantidad=0)
+        data['data'] = {'productos':productos, 'total':float(total), 'cantidad':con}
+        data['action'] = 'carrito'
+    return jsonify(data) #render_template("cart.html", productos=productos, total=float(total), cantidad=con)
 
-    return render_template("cart.html", productos=productos, total=float(total), cantidad=con)
 
-@app.route("/cart/pay_cart")
+@app.route("/cart/pay_cart", methods=["POST"])
 def all_cart():
-    if "loggedin" not in session:
-        return redirect("../login")
-
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
     cursor.execute("show tables like 'carrito'")
     if cursor.fetchall():
         cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}'")
         mysql.connection.commit()
 
-    return redirect("../cart")
+    return jsonify("success delete")
 
-@app.route("/cart/<int:id_p>")
+
+@app.route("/cart/<string:id_p>", methods=['POST'])
 def delete_product_car(id_p):
-    if "loggedin" not in session:
-        return redirect("../login")
-
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}' AND product_ID='{id_p}'")
+    cursor.execute(f"DELETE FROM Carrito WHERE user_ID='{session['id']}' AND product_ID='{int(id_p)}'")
     mysql.connection.commit()
-    return redirect("../cart")
+    return jsonify("success delete")
 
+'''
 
 @app.route("/mysql_preview")
 def show_all_data():
@@ -287,3 +273,4 @@ def show_all_data():
     C = cursor.fetchall() 
 
     return render_template("mysql_preview.html", A=A, B=B, C=C)
+'''

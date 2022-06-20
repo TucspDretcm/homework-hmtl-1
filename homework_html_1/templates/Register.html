@@ -46,21 +46,15 @@
   </script>
 
 
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Register_style.css') }}">
+  <link rel="stylesheet" type="text/css" href="../static/Register_style.css">
   <title>Amaxon-Register</title>
 </head>
 
 <body>
-  {% for message in get_flashed_messages() %}
-    <script type="text/javascript">
-      var msg = "Error user name."; //{{ message }};
-      alert(msg);
-    </script>
-  {% endfor %}
 
   <div class="Registro">
     
-    <img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="imagen" >
+    <img src="../static/imagenes/logo.jpg" class="imagen" >
 
     <header>
       <h1>Registrate!</h1> 
@@ -68,7 +62,7 @@
 
     <label>Nombre de Usuario:</label>
 
-    <form action="{{ url_for('newUser')}}" method="post">
+    <form>
       <input id="registrousuario" type="text" placeholder="Ingresa tu Usuario " name="user">
 
       <label>Nueva Contraseña:</label>
@@ -80,7 +74,7 @@
       <input id="botoncrearcuenta" type="submit" value="Crear cuenta">
     </form>
 
-    <a targe="_blank" href="login">Iniciar Sesión</a>
+    <a targe="_blank" href="login.html">Iniciar Sesión</a>
 
 
   </div>

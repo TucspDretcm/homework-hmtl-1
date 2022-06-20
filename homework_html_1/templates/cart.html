@@ -1,47 +1,54 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
+      <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
+      <title>Carrito de Compras</title>
+      <link rel="shortcut icon" type="image/x-icon" href="../static/imagenes/carro.png">
+      <link rel="stylesheet" type="text/css" href="../static/cart_style.css">
 
-{% block head %}
+  </head>
 
-<title>Carrito de Compras</title>
-<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='imagenes/carro.png') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cart_style.css') }}">
+  <body>
 
-{% endblock%}
+    <header>
+      <nav>
+        <a href="pantalla_principal.html"><img src="../static/imagenes/logo.jpg" class="logo"></a>
 
+        <input type="text" id="busqueda" value="">
+        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
 
+        <a href="forum.html" class="options-1"><b>Forum</b></a>
+        <a href="info.html" class="options-2"><b>Info</b></a>
 
-{% block body %}
+        
+        <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
+        
+
+        <a href="login.html" class="options-3"><b>Sign Out</b></a>
+
+      </nav>  
+    </header>
 
         <div class="container">
         <h1>Carrito de Compras</h1>
         <div class="cart">
             <div class="products">
 
-                {% for producto in productos %}
-                    <div class="product">
-                        <img src="{{ url_for('static', filename='img_productos/')}}{{ producto['imagen'] }}">
-                        <div class="product-info">
-                            <h3 class="product-name">{{ producto["producto"] }}</h3>
-                            <h4 class="product-price">S/. {{  producto["precio"] }}</h4>
-                            <h4 class="product-offer">0%</h4>
-                            <p class="product-quantity"><b>Cantidad:</b> <input value="{{ producto['cantidad'] }}"></p>
-                            <a href="/cart/{{producto['product_ID']}}"><p class="product-remove">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                <span class="remove">Quitar</span>
-                            </p></a>
-                        </div>
-                    </div>
-                {% endfor %}
             </div>
 
         <div class="cart-total">
             <p>
                 <span>Precio Total</span>
-                <span>S/. {{ total }}</span>
+                <span id="total_price">S/. 0.0</span>
             </p>
             <p>
                 <span>Cantidad de Productos</span>
-                <span>{{ cantidad }}</span>
+                <span id="quantity">0</span>
             </p>
 
             <!--Descuento si se puso en las clases product-offer-->
@@ -50,12 +57,102 @@
                 <span>S/. 0</span>
             </p>
             
-            <a href="/cart/pay_cart" name="pay">Ir a Pagar</a>
+            <spam class="bar" onclick="delete_all_products()">Ir a Pagar</span>
 
         </div>
         </div>
     </div>
-    
 
+      <script type="text/javascript">
+        function delete_product(id_product){
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/cart/'+id_product);
+            request.send({msg:"deleting product"});
+        
+            request.onload = () => {
+                location.reload();
+            }
+        }
 
-{% endblock%}
+        function delete_all_products(){
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/cart/pay_cart');
+            request.send({msg:"deleting products"});
+        
+            request.onload = () => {
+                location.reload();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/cart_loader');
+            request.onload = () => {
+              const data = JSON.parse(request.responseText);
+              if(data.action == 'carrito'){
+                document.querySelector("#total_price").innerHTML = data.data.total;
+                document.querySelector("#quantity").innerHTML = data.data.cantidad;
+
+                var productos = data.data.productos;
+                for(let i in productos){
+                    var bloque = document.createElement("div");
+                    bloque.setAttribute("class","product");
+
+                    var img = document.createElement("img");
+                    img.setAttribute("src","../static/img_productos/" + productos[i].imagen);
+
+                    var datos = document.createElement("div");
+                    datos.setAttribute("class","product-info");
+
+                    var name = document.createElement("h3");
+                    name.setAttribute("class","product-name");
+                    name.innerHTML = productos[i]['producto'];
+                    var price = document.createElement("h4");
+                    price.setAttribute("class","product-price");
+                    price.innerHTML =  "S/. "+ productos[i]['precio'];
+                    var offer = document.createElement("h4");
+                    offer.setAttribute("class","product-offer");
+                    offer.innerHTML = "% 0";
+
+                    var cantidad = document.createElement("p");
+                    cantidad.setAttribute("class","product-quantity");
+                    cantidad.innerHTML = "Cantidad: " + productos[i]["cantidad"];
+
+                    var tag_p = document.createElement("p");
+                    tag_p.setAttribute("class","product-remove");
+                    tag_p.setAttribute("onclick", "delete_product("+productos[i].product_ID+")");
+
+                    var tag_i = document.createElement("i");
+                    tag_i.setAttribute("class","fa fa-trash");
+                    tag_i.setAttribute("aria-hidden","true");
+
+                    var tag_span = document.createElement("span");
+                    tag_span.setAttribute("class","remove");
+                    tag_span.innerHTML = "Quitar";
+
+                    tag_p.appendChild(tag_i);
+                    tag_p.appendChild(tag_span);
+
+                    datos.appendChild(name);
+                    datos.appendChild(price);
+                    datos.appendChild(offer);
+                    datos.appendChild(cantidad);
+                    datos.appendChild(tag_p);
+
+                    bloque.appendChild(img);
+                    bloque.appendChild(datos);
+                    document.querySelector(".products").appendChild(bloque);
+                }
+            }
+            else if (data.action == 'registrar'){
+                location.href = 'register.html';
+                }
+            }
+            request.send({msg:"get request"});
+
+        });
+      </script>
+
+  </body>
+</html>

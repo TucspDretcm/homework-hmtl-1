@@ -118,7 +118,7 @@
     font-size: 20px;
 }
 
-.cart-total a
+.cart-total .bar
 {
     display: block;
     text-align: center;
@@ -130,7 +130,7 @@
 
 }
 
-.cart-total a:hover
+.cart-total .bar:hover
 {
     background-color: red;
 }

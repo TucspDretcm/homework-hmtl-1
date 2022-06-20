@@ -3,31 +3,29 @@
   <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='my_bar_style.css') }}">
+  <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
   <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
-    {% block head %}
-    {% endblock %}
   </head>
 
   <body>
 
     <header>
       <nav>
-        <a href="..\pantalla_principal"><img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="logo"></a>
+        <a href="/pantalla_principal.html"><img src="../static/imagenes/logo.jpg" class="logo"></a>
 
         <input type="text" id="busqueda" value="">
         <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
 
-        <a href="..\forum" class="options-1"><b>Forum</b></a>
-        <a href="..\info" class="options-2"><b>Info</b></a>
+        <a href="/forum.html" class="options-1"><b>Forum</b></a>
+        <a href="/info.html" class="options-2"><b>Info</b></a>
 
         
-        <a href="..\cart"><img src="{{ url_for('static', filename='imagenes/carrito.jpg') }}" class="carrito"></a>
+        <a href="/cart.html"><img src="imagenes/carrito.jpg" class="carrito"></a>
         
 
-        <a href="..\login" class="options-3"><b>Sign Out</b></a>
+        <a href="/login.html" class="options-3"><b>Sign Out</b></a>
 
       </nav>  
     </header>

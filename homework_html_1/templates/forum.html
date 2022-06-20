@@ -1,6 +1,10 @@
-{% extends "layout.html" %}
-
-{% block head %}
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
+      <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
         <script>
             /*
             document.addEventListener('DOMContentLoaded', () => {
@@ -47,13 +51,33 @@
                 background-color: #999;
             }
         </style>
-{% endblock%}
+ </head>
 
-{% block body %}
+  <body>
+
+    <header>
+      <nav>
+        <a href="pantalla_principal.html"><img src="../static/imagenes/logo.jpg" class="logo"></a>
+
+        <input type="text" id="busqueda" value="">
+        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <a href="forum.html" class="options-1"><b>Forum</b></a>
+        <a href="info.html" class="options-2"><b>Info</b></a>
+
+        
+        <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
+
+        <a href="login.html" class="options-3"><b>Sign Out</b></a>
+
+      </nav>  
+    </header>
     <div class="top">
     <center>
         <br>
-		<img src="{{ url_for('static', filename='imagenes/soporte.jpg')}}" alt="soporte" width="20%" height="20%">
+		<img src="../static/imagenes/soporte.jpg" alt="soporte" width="20%" height="20%">
 
 		<H2> Nos encanta tener una opinión de nuestros clientes, por lo que, agradeceríamos cualquier duda o reclamo.Escribelo en el foro. Estamos pendientes a cualquier observación.<br> Amaxon.</H2><br>
     </center>
@@ -62,7 +86,7 @@
     <div class="botton">
         <h4> PON TU COMENTARIO AQUÍ:</h4>
 
-        <form id="new-task" action="{{ url_for('newComment')}}" method="post">
+        <form id="new-task">
             <input id="task" autocomplete="off" autofocus placeholder="Opinión" type="text" name="comment">
             <input id="b_submit" type="submit" value="Publicar">
         </form>
@@ -71,11 +95,10 @@
     	<h4> COMENTARIOS: </h4>
     	<br>
         <ul>
-        {% for comment in comments %}
-            <li class="comment"> <b>{{ comment['username'] }}:</b> {{ comment['comment'] }}</li>
-        {% endfor %}
+
         </ul>
     </div>
     <br>
 
-{% endblock %}
+</body>
+</html>

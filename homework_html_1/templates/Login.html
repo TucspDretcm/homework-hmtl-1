@@ -3,45 +3,77 @@
 <head>
   <script> 
   
-  document.addEventListener('DOMContentLoaded', () => {
-  document.querySelector("#iniciar").disabled = true;
+    document.addEventListener('DOMContentLoaded', () => {
 
-  function login(){
-    if (document.querySelector("#usuario").value.length > 0 && document.querySelector("#contraseña").value.length > 0){
-      document.querySelector("#iniciar").style.background="#ffc107";
-      document.querySelector("#iniciar").style.color="black";
+      document.querySelector("#form").onsubmit = () => {
+        const request = new XMLHttpRequest();
+        const account = document.querySelector("#usuario").value;
+        const psw = document.querySelector("#contraseña").value;
 
-      document.querySelector("#iniciar").disabled = false;
-    }
-    else
+        request.open('POST', 'http://127.0.0.1:5000/validate_user');
+
+        request.onload = () => {
+          const data = JSON.parse(request.responseText);
+          if(data.success){
+            //window.location.href = "/bienvenido";
+            localStorage.setItem("username", account);
+            location.href = "bienvenido.html";
+            //window.location = window.location.href.replace("login", "bienvenido");
+            //res.render('bienvenido.html', {name: account});
+            //fetch("/bienvenido");
+          }
+          else{
+            document.querySelector("#usuario").value = "";
+            document.querySelector("#contraseña").value = "";
+          }
+        }
+
+        const data = new FormData();
+        data.append('account', account);
+        data.append('password', psw);
+
+        request.send(data);
+        return false;
+      };
+
     document.querySelector("#iniciar").disabled = true;
 
+      function login(){
+        if (document.querySelector("#usuario").value.length > 0 && document.querySelector("#contraseña").value.length > 0){
+          document.querySelector("#iniciar").style.background="#ffc107";
+          document.querySelector("#iniciar").style.color="black";
 
-  }
-  
-  document.querySelector("#usuario").onkeyup = () => {
-    document.querySelector("#iniciar").style.background="#b80f22";
-    document.querySelector("#iniciar").style.color="#fff";
-    login()
-  };
-  document.querySelector("#contraseña").onkeyup = () => {
-    document.querySelector("#iniciar").style.background="#b80f22";
-    document.querySelector("#iniciar").style.color="#fff";
-    login()
-  };
+          document.querySelector("#iniciar").disabled = false;
+        }
+        else
+        document.querySelector("#iniciar").disabled = true;
 
-  
-});
+
+      }
+      
+      document.querySelector("#usuario").onkeyup = () => {
+        document.querySelector("#iniciar").style.background="#b80f22";
+        document.querySelector("#iniciar").style.color="#fff";
+        login()
+      };
+      document.querySelector("#contraseña").onkeyup = () => {
+        document.querySelector("#iniciar").style.background="#b80f22";
+        document.querySelector("#iniciar").style.color="#fff";
+        login()
+      };
+
+    });
+
   </script>
 
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Login_style.css') }}">
+  <link rel="stylesheet" type="text/css" href="../static/Login_style.css">
   <title>Amaxon-Login</title>
 </head>
 
 <body>
   <div class="Login">
     
-    <img src="{{ url_for('static', filename='imagenes/logo.jpg') }}" class="imagen" >
+    <img src="../static/imagenes/logo.jpg" class="imagen" >
 
     <header>
       <h1>Iniciar sesión</h1> 
@@ -49,7 +81,7 @@
 
     
     <label>Usuario:</label>
-    <form action="{{ url_for('validateUser')}}" method="post"> 
+    <form id="form">
       <input id="usuario" type="text" placeholder="Ingresa tu Usuario " name="user">
 
       <label>Contraseña:</label>
@@ -61,7 +93,7 @@
     </form>
 
     <a href="#" class="opciones" >¿Olvidaste tu contraseña?</a>
-    <a href="register" class="opciones">Crear cuenta nueva</a>
+    <a href="register.html" class="opciones">Crear cuenta nueva</a>
 
   </div>
 

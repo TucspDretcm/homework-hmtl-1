@@ -1,11 +1,36 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
+      <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
+      <link rel="stylesheet" type="text/css" href="../static/info_style.css">
+	<title>Info</title>
+ </head>
 
-{% block head %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='info_style.css') }}">
-<title>Info</title>
-{% endblock%}
+  <body>
 
-{% block body %}
+    <header>
+      <nav>
+        <a href="pantalla_principal.html"><img src="../static/imagenes/logo.jpg" class="logo"></a>
+
+        <input type="text" id="busqueda" value="">
+        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <a href="forum.html" class="options-1"><b>Forum</b></a>
+        <a href="info.html" class="options-2"><b>Info</b></a>
+
+        
+        <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
+        
+
+        <a href="login.html" class="options-3"><b>Sign Out</b></a>
+
+      </nav>  
+    </header>
 	<div class="container" align="center">
 		<br><br>
 		<H1>Información de la Página</H1><br>
@@ -38,4 +63,5 @@
 		<br><H2>Amaxon Copyright Rights ©</H2>
 		<br><br>
 	</div>
-{% endblock %}
+</body>
+</html>
