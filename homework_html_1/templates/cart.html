@@ -29,7 +29,7 @@
         <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
         
 
-        <a href="login.html" class="options-3"><b>Sign Out</b></a>
+        <b class="options-3" onclick="logout()">Sign Out</b>
 
       </nav>  
     </header>
@@ -64,6 +64,16 @@
     </div>
 
       <script type="text/javascript">
+        function logout(){
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/logout');
+            request.send("logout post");
+        
+            request.onload = () => {
+                location.href = "login.html";
+            }
+        }
+
         function delete_product(id_product){
             const request = new XMLHttpRequest();
             request.open('POST', 'http://127.0.0.1:5000/cart/'+id_product);
@@ -85,9 +95,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-
             const request = new XMLHttpRequest();
             request.open('POST', 'http://127.0.0.1:5000/cart_loader');
+
             request.onload = () => {
               const data = JSON.parse(request.responseText);
               if(data.action == 'carrito'){
@@ -147,9 +157,10 @@
             }
             else if (data.action == 'registrar'){
                 location.href = 'register.html';
-                }
             }
-            request.send({msg:"get request"});
+        }
+
+        request.send({msg:"get request"});
 
         });
       </script>

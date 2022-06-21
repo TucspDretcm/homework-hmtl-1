@@ -24,7 +24,7 @@
 
         <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
 
-        <a href="login.html" class="options-3"><b>Sign Out</b></a>
+        <b class="options-3" onclick="logout()">Sign Out</b>
 
       </nav>  
     </header>
@@ -33,7 +33,17 @@
 
 	<center><h1 id="welcome_msg">Bienvenido !!!</h1></center>
 
-	<script type="text/javascript">
+  <script type="text/javascript">
+      function logout(){
+        const request = new XMLHttpRequest();
+        request.open('POST', 'http://127.0.0.1:5000/logout');
+        request.send("logout post");
+        
+        request.onload = () => {
+            location.href = "login.html";
+        }
+      }
+
 	    document.addEventListener('DOMContentLoaded', () => {
 	         document.querySelector("#welcome_msg").innerHTML = "Welcome " + localStorage.getItem("username") + " !!!";
 	    });

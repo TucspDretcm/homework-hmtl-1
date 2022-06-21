@@ -1,32 +1,85 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
+      <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
+      <title>Amaxon Data Base</title>
 
-{% block head%}
-<title>Amaxon Data Base</title>
-{% endblock %}
+      <script type="text/javascript">
+        function logout(){
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/logout');
+            request.send("logout post");
+        
+            request.onload = () => {
+                location.href = "login.html";
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
 
-{% block body %}
-<br>
-<h4>Users Table:</h4>
-<ul>
-  {% for i in A %}
-  <li>{{ i }}</li>
-  {% endfor %}
-</ul>
-<br>
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/mysql_preview');
+            request.onload = () => {
+              const data = JSON.parse(request.responseText);
+              const vars = ['a','b','c'], clases = ['.users', '.products', '.cart'];
 
-<h4>Products Table:</h4>
-<ul>
-  {% for i in B %}
-  <li>{{ i }}</li>
-  {% endfor %}
-</ul>
-<br>
+              for(let i in vars){
+                if(data[vars[i]]){
+                  var datos = data["data_"+vars[i]];
+                  for(let j in datos){
+                    var li = document.createElement("li");
+                    li.innerHTML = JSON.stringify(datos[j]);
+                    document.querySelector(clases[i]).appendChild(li);
+                  }
+                }
+              }
+            }
 
-<h4>Carrito Table:</h4>
-<ul>
-  {% for i in C %}
-  <li>{{ i }}</li>
-  {% endfor %}
-</ul>
-<br>
-{% endblock %}
+            request.send({msg:"get request"});
+        });
+      </script>
+  </head>
+
+  <body>
+
+    <header>
+      <nav>
+        <a href="pantalla_principal.html"><img src="../static/imagenes/logo.jpg" class="logo"></a>
+
+        <input type="text" id="busqueda" value="">
+        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <a href="forum.html" class="options-1"><b>Forum</b></a>
+        <a href="info.html" class="options-2"><b>Info</b></a>
+
+        
+        <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
+        
+
+        <b class="options-3" onclick="logout()">Sign Out</b>
+
+      </nav>  
+    </header>
+    <br>
+    <h4>Users Table:</h4>
+    <ul class="users">
+    </ul>
+    <br>
+
+    <h4>Products Table:</h4>
+    <ul class="products">
+    </ul>
+    <br>
+
+    <h4>Carrito Table:</h4>
+    <ul class="cart">
+    </ul>
+    <br>
+
+  </body>
+</html>

@@ -25,32 +25,28 @@ AccountAdministration = "amaxon"
 
 session = {}  # simulator or global variable of "Flask/session"
 
-'''
-@app.route("/login", methods=["POST"])
+
+@app.route("/new_user", methods=["POST"])
 def newUser():
-    user = request.form.get("user")
+    user = request.form.get("account")
     password = request.form.get("password")
-    password_2 = request.form.get("password_2")
 
-    if password == password_2 and user != None and password != None:
-
+    if user != None and password != None:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        try:
+        cursor.execute("show tables like 'Users'")
+        if cursor.fetchall():
             cursor.execute(f"SELECT * FROM Users WHERE username='{user}'")
             if cursor.fetchone():
-                    flash("The account name alredy exist. call to javascript alert(...)")
-                    return redirect("register")
-        except:
+                    return jsonify({"success":False})
+        else:
             cursor.execute("CREATE TABLE Users (user_ID int PRIMARY KEY AUTO_INCREMENT, username VARCHAR(50), password VARCHAR(50))")
-            mysql.connection.commit()
 
         cursor.execute('INSERT INTO Users (username, password) VALUES (% s, % s)', ( user, AlgAbs.cifrado(password) ) )
         mysql.connection.commit()
-        return render_template("login.html")
 
-    return redirect("register")  # redireciona a la ruta "../register"
-'''
+    return jsonify({"success":True})
+
 
 
 @app.route("/validate_user", methods=["POST"])
@@ -70,6 +66,7 @@ def validateUser():
             session['username'] = account['username']
             success = True
     return jsonify({'success':success})
+
 
 '''
 @app.route("/pantalla_principal", methods=["POST"])
@@ -106,13 +103,104 @@ def newProduct():
 
     return redirect("pantalla_principal")
 
+'''
 
-@app.route("/cart", methods=["POST"])
-def send_car():
+
+@app.route("/logout", methods=["POST"])
+def login_render():
+    if "loggedin" in session:
+        session.pop('loggedin', None)
+    if "id" in session:
+        session.pop('id', None)
+    if "username" in session:
+        session.pop('username', None)
+    return jsonify("logout ok")
+
+
+@app.route("/main_load", methods=["POST"])
+def pantalla_render():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    data={"success":False}
+    cursor.execute("show tables like 'Products'")
+    if cursor.fetchall():
+        cursor.execute(f"""SELECT pr.product_ID, pr.producto, pr.imagen FROM Products pr""")
+        data['products'] = cursor.fetchall()
+        data['success'] = True
+        data['admi'] = False
+        if 'loggedin' in session:
+            data['admi'] = True if session['username'] == AccountAdministration else False
+    return jsonify(data)
+
+
+@app.route("/main/select", methods=["POST"])
+def productos_info():
+    if request.form.get("action") == "select":
+        session['product_select'] = int(request.form.get("product_id"))
+        return jsonify("ok save id")
+    else:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        data = {}
+        cursor.execute(f"""SELECT * FROM Products WHERE product_ID={session['product_select']}""")
+        data['producto'] = cursor.fetchone()
+        data['producto']['descripcion'] = data['producto']['descripcion'].split("/n")
+    return jsonify(data)
+
+'''
+@app.route("/pantalla_principal/set/<int:id_p>", methods=["POST"])
+def productos_set(id_p):
+    if "loggedin" not in session:
+        return redirect("../../login")
+
+    return f"setting element with id {id_p}"
+
+
+@app.route("/pantalla_principal/del/<int:id_p>", methods=["POST"])
+def productos_del(id_p):
+    if "loggedin" not in session:
+        return redirect("../../login")
+    return f"deleting element with id {id_p}"
+
+'''
+
+@app.route("/forum_send", methods=["POST"])
+def newComment():
     if 'loggedin' not in session:
-        return redirect("login")
+        return jsonify({'success':False})
 
-    ob = int(request.form.get("object"))
+    comment = request.form.get("comment")
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("show tables like 'comments'")
+    if not cursor.fetchall():
+        cursor.execute("CREATE TABLE Comments (user_ID int, comment VARCHAR(250))")
+
+    cursor.execute(f"INSERT INTO Comments (user_ID, comment) VALUES ( '{session['id']}', '{comment}')")    
+    mysql.connection.commit()
+    return jsonify({'success':True})
+
+
+@app.route("/forum_data", methods=["POST"])
+def forum_render():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    data = {'success':False}
+
+    cursor.execute("show tables like 'comments'")
+    if cursor.fetchall():
+        cursor.execute(f"""SELECT us.username, cm.comment 
+            FROM Users us, Comments cm
+            WHERE us.user_ID = cm.user_ID""")
+        data['data'] = cursor.fetchall()
+        data['success'] = True
+
+    return jsonify(data)
+
+
+@app.route("/send_cart/<string:id_p>", methods=["POST"])
+def send_car(id_p):
+    if 'loggedin' not in session:
+        return jsonify({'success':False})
+
+    ob = int(id_p)
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
     try:
@@ -126,97 +214,9 @@ def send_car():
         cursor.execute("CREATE TABLE Carrito (user_ID int, product_ID int, cantidad int)")
         cursor.execute(f"INSERT INTO Carrito (user_ID, product_ID, cantidad) VALUES ( '{session['id']}', '{ob}', '{1}')")
         mysql.connection.commit()
-    return redirect("cart")
-
-@app.route("/forum", methods=["POST"])
-def newComment():
-    if 'loggedin' not in session:
-        return redirect("login")
-
-    comment = request.form.get("comment")
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-    try:
-        cursor.execute(f"INSERT INTO Comments (user_ID, comment) VALUES ( '{session['id']}', '{comment}')")    
-        mysql.connection.commit()
-    except:
-        cursor.execute("CREATE TABLE Comments (user_ID int, comment VARCHAR(250))")
-        cursor.execute(f"INSERT INTO Comments (user_ID, comment) VALUES ( '{session['id']}', '{comment}')")    
-        mysql.connection.commit()
-
-    return redirect("forum")
+    return jsonify({'success':True})
 
 
-@app.route("/login")
-def login_render():
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
-    return render_template("login.html")
-
-
-@app.route("/pantalla_principal")
-def pantalla_render():
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-    try:
-        cursor.execute(f"""SELECT pr.product_ID, pr.producto, pr.imagen FROM Products pr""")
-        productos = cursor.fetchall()
-    except:
-        return render_template("pantalla_principal.html",dominio=session["username"], productos=[])
-
-    return render_template("pantalla_principal.html", dominio=session["username"], productos=productos, admi=AccountAdministration)
-
-
-@app.route("/pantalla_principal/<int:id_p>")
-def productos_info(id_p):
-    if "loggedin" not in session:
-        return redirect("login")
-
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-    try:
-        cursor.execute(f"""SELECT * FROM Products WHERE product_ID={id_p}""")
-        producto = cursor.fetchone()
-        descrip = producto['descripcion'].split("/n")
-    except:
-        return render_template("productos_link.html", producto={"producto":None, "imagen":None,"precio":None, "descripcion":None}, descrip=[])
-
-    return render_template("productos_link.html", producto=producto, descrip=descrip)
-
-
-@app.route("/pantalla_principal/set/<int:id_p>")
-def productos_set(id_p):
-    if "loggedin" not in session:
-        return redirect("../../login")
-
-    return f"setting element with id {id_p}"
-
-
-@app.route("/pantalla_principal/del/<int:id_p>")
-def productos_del(id_p):
-    if "loggedin" not in session:
-        return redirect("../../login")
-    return f"deleting element with id {id_p}"
-
-
-@app.route("/forum")
-def forum_render():
-    if "loggedin" not in session:
-        return redirect("login")
-
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-    try:
-        cursor.execute(f"""SELECT us.username, cm.comment 
-            FROM Users us, Comments cm
-            WHERE us.user_ID = cm.user_ID""")
-    except:
-        return render_template("forum.html",comments=[])
-
-    return render_template("forum.html", comments=cursor.fetchall())
-
-'''
 @app.route("/cart_loader", methods=["POST"])
 def cart_loader():
     data = {'action':'vacio'}
@@ -239,7 +239,7 @@ def cart_loader():
             con += p['cantidad']
         data['data'] = {'productos':productos, 'total':float(total), 'cantidad':con}
         data['action'] = 'carrito'
-    return jsonify(data) #render_template("cart.html", productos=productos, total=float(total), cantidad=con)
+    return jsonify(data)
 
 
 @app.route("/cart/pay_cart", methods=["POST"])
@@ -260,17 +260,29 @@ def delete_product_car(id_p):
     mysql.connection.commit()
     return jsonify("success delete")
 
-'''
 
-@app.route("/mysql_preview")
+
+@app.route("/mysql_preview", methods=["POST"])
 def show_all_data():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute("SELECT * FROM Users")
-    A = cursor.fetchall()
-    cursor.execute("SELECT * FROM Products")
-    B = cursor.fetchall()
-    cursor.execute("SELECT * FROM Carrito")
-    C = cursor.fetchall() 
+    data = {'a':False,'b':False,'c':False}
 
-    return render_template("mysql_preview.html", A=A, B=B, C=C)
-'''
+    cursor.execute("show tables like 'users'")
+    if cursor.fetchall():
+        cursor.execute("SELECT * FROM Users")
+        data['a'] = True
+        data['data_a'] = cursor.fetchall()
+
+    cursor.execute("show tables like 'products'")
+    if cursor.fetchall():
+        cursor.execute("SELECT * FROM products")
+        data['b'] = True
+        data['data_b'] = cursor.fetchall()
+
+    cursor.execute("show tables like 'carrito'")
+    if cursor.fetchall():
+        cursor.execute("SELECT * FROM carrito")
+        data['c'] = True
+        data['data_c'] = cursor.fetchall()
+
+    return jsonify(data)

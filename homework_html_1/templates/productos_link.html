@@ -1,35 +1,106 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
+        <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
+        <title>Producto</title>
+        <script type="text/javascript">
+                function logout(){
+                    const request = new XMLHttpRequest();
+                    request.open('POST', 'http://127.0.0.1:5000/logout');
+                    request.send("logout post");
+                
+                    request.onload = () => {
+                        location.href = "login.html";
+                    }
+                }
 
-{% block head %}
-        <title>{{ producto['producto'] }}</title>
-{% endblock%}
+                function send_cart(product_id){
+                    const request = new XMLHttpRequest();
+                    request.open('POST', 'http://127.0.0.1:5000/send_cart/'+product_id);
+                    request.send("logout post");
+                
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        if(data.success){
+                                location.href = "cart.html";
+                        }
+                        else{
+                                location.href = "login.html";
+                        }
+                    }
+                }
 
+                document.addEventListener('DOMContentLoaded', () => {
+                    const request = new XMLHttpRequest();
+                    request.open('POST', 'http://127.0.0.1:5000/main/select');
+                    const data = new FormData();
+                    data.append('action', 'load');
+                    request.send(data);
 
-{% block body %}
+                    request.onload = () => {
+                      const data = JSON.parse(request.responseText);
+                      document.querySelector(".img_p").setAttribute("src","../static/img_productos/" +data.producto['imagen']);
+                      document.querySelector(".producto").innerHTML = data.producto['producto'];
+                      document.querySelector(".precio").innerHTML = "S/." + data.producto['precio'];
+
+                      for(let i in data.producto['descripcion']){
+                        var li = document.createElement("li");
+                        li.innerHTML = "• " + data.producto['descripcion'][i];
+                        document.querySelector(".descripcion").appendChild(li);
+                      }
+
+                      document.querySelector(".button-cart").setAttribute("onclick", "send_cart("+data.producto['product_ID'] +")");
+                    }
+
+                });
+        </script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a href="pantalla_principal.html"><img src="../static/imagenes/logo.jpg" class="logo"></a>
+
+        <input type="text" id="busqueda" value="">
+        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <a href="forum.html" class="options-1"><b>Forum</b></a>
+        <a href="info.html" class="options-2"><b>Info</b></a>
+
+        
+        <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
+        
+
+        <b class="options-3" onclick="logout()">Sign Out</b>
+
+      </nav>  
+    </header>
+
         <br>
         <br>
         <br>
         <div align="center">
 
-        <img width="340px" alt="laptop" src="{{ url_for('static', filename='img_productos/') }}{{ producto['imagen'] }}">
-        <h1>{{ producto['producto'] }}</h1>
-        <h2>S/. {{ producto['precio'] }}</h2>
+        <img width="340px" class="img_p">
+        <h1 class="producto"></h1>
+        <h2 class="precio"></h2>
 
         <h2>Caracteristicas</h2>
 
-        <ul>
-        {% for line in descrip %}
-                <li>■ {{line}}</li>
-        {% endfor %}
+        <ul class="descripcion">
         </ul>
         <br>
-        <form action="{{ url_for('send_car')}}" method="post">
-            <input type="submit" value="AGREGAR AL CARRITO"><br>
-            <input type="text" value="{{ producto['product_ID'] }}" name="object" style="visibility: hidden;">
-        </form>
+
+        <input type="button" value="AGREGAR AL CARRITO" class="button-cart"><br>
 
         </div>
         <br>
         <br>
-        <br>        
-{% endblock%}
+        <br> 
+  </body>
+</html>

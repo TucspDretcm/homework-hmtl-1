@@ -1,72 +1,139 @@
-<!--Pantalla Principal (productos)-->
-{% extends "layout.html" %}
-
-{% block head %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-<title>Amaxon</title>
-{% endblock %}
-
-
-{% block body %}
-    {% for message in get_flashed_messages() %}
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
+      <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
+      <link rel="stylesheet" type="text/css" href="../static/style.css">
+      <title>Amaxon</title>
       <script type="text/javascript">
-        var msg = "El producto ya existe en la base de datos :)";
-        alert(msg);
+        function logout(){
+          const request = new XMLHttpRequest();
+          request.open('POST', 'http://127.0.0.1:5000/logout');
+          request.send("logout post");
+        
+          request.onload = () => {
+            location.href = "login.html";
+          }
+        }
+
+        function select_product(id_product){
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/main/select');
+            const data = new FormData();
+            data.append('product_id', id_product);
+            data.append('action', 'select');
+            request.send(data);
+
+            request.onload = () => {
+                location.href = "productos_link.html";
+            }
+        }
+
+        function edit_product(id_product){
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/main/edit/'+id_product);
+            request.send({msg:"deleting product"});
+        
+            request.onload = () => {
+                location.reload();
+            }
+        }
+
+        function delete_product(id_product){
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/main/del/'+id_product);
+            request.send({msg:"deleting product"});
+        
+            request.onload = () => {
+                location.reload();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const request = new XMLHttpRequest();
+            request.open('POST', 'http://127.0.0.1:5000/main_load');
+            request.onload = () => {
+              const data = JSON.parse(request.responseText);
+              if(data.success){
+                var productos = data.products;
+                for(let i in productos){
+
+                    var img = document.createElement("img");
+                    img.setAttribute("src","../static/img_productos/" + productos[i].imagen);
+                    img.setAttribute("width","280px");
+
+                    var select = document.createElement("input");
+                    select.setAttribute("type","button");
+                    select.setAttribute("value",productos[i].producto);
+                    select.setAttribute("onclick","select_product("+productos[i].product_ID+")");
+
+                    for(let i=0; i<4; i++){
+                      document.querySelector(".products").appendChild(document.createElement("br"));
+                    }
+
+                    document.querySelector(".products").appendChild(img);
+
+                    for(let i=0; i<2; i++){
+                      document.querySelector(".products").appendChild(document.createElement("br"));
+                    }
+                    
+                    document.querySelector(".products").appendChild(select);
+
+                    if(data.admi){
+                      var op = document.createElement("input");
+                      op.setAttribute("type","button");
+                      op.setAttribute("value", "Edit product");
+                      //op.setAttribute("onclick","edit_product("+productos[i].product_ID+")");
+                      document.querySelector(".products").appendChild(op);
+                      op = document.createElement("input");
+                      op.setAttribute("type","button");
+                      op.setAttribute("value", "Delete product");
+                      //op.setAttribute("onclick","delete_product("+productos[i].product_ID+")");
+                      document.querySelector(".products").appendChild(op);
+                    }
+                }
+                for(let i=0; i<4; i++){
+                  document.querySelector(".products").appendChild(document.createElement("br"));
+                }
+            }
+        }
+
+        request.send("get request");
+
+        });
+
       </script>
-    {% endfor %}
-    <div class="p" align="center">
-      
-      <hr></hr>
-      <h2>   </h2>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a href="pantalla_principal.html"><img src="../static/imagenes/logo.jpg" class="logo"></a>
+
+        <input type="text" id="busqueda" value="">
+        <button class="lupa" onclick="document.getElementById('busqueda').value = ''">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <a href="forum.html" class="options-1"><b>Forum</b></a>
+        <a href="info.html" class="options-2"><b>Info</b></a>
+
+        
+        <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
+        
+
+        <b class="options-3" onclick="logout()">Sign Out</b>
+
+      </nav>  
+    </header>
+
+    <div class="products" align="center">
       <br>
       <br>
-      <u><h1>Llena tu carrito del mejor Hardware</h1></u><br><br>
+      <u><h1>Llena tu carrito del mejor Hardware</h1></u>
 
-      {% for producto in productos %}
-        <br>
-        <br>
-        <img width="280px" alt="laptop" src="{{ url_for('static', filename='img_productos/') }}{{ producto['imagen'] }}">
-        <br>
-        <br>
-        <form>
-          <a href="/pantalla_principal/{{ producto['product_ID'] }}" style="text-decoration: none;">
-            <input type="button" value="{{ producto['producto'] }}">
-          </a>
-          {% if dominio == admi %}
-            <a href="/pantalla_principal/set/{{ producto['product_ID'] }}" style="text-decoration: none;">
-              <input type="button" value=" Set Product ">
-            </a>
-            <a href="/pantalla_principal/del/{{ producto['product_ID'] }}" style="text-decoration: none;">
-              <input type="button" value=" Delete ">
-            </a>
-          {% endif %}
-        </form>
-      {% endfor %}
-
-    {% if dominio == admi %}
-      <section class="form-register-products">
-        <h4>Formulario de Registro de Productos</h4>
-        <p> Aqui puedes ingresar tus propios productos!! </p>
-
-        <form action="{{ url_for('newProduct')}}" method="post">
-          <input class="controls" type="text" name="producto" id="nombre" placeholders="Ingrese el nombre del producto">
-          <input class="controls" type="text" name="precio" id="precio" placeholders="Ingrese el precio del producto">
-          <input class="controls" type="text" name="imagen" id="descripcion" placeholders="Ingrese el nombre de la imagen(img.jpg, img.png)">
-          <textarea placeholders="descripcion" name="descripcion"></textarea><br>
-          <p>
-          <input class="botons" type="submit" value="Registrar">
-          </p>
-        </form>
-      </section>
-
-    <br>
-    <a href="mysql_preview"><input class="botons" type="button" value="Data Base Show"></a>
-
-    {% endif %}
-
-    <br>
-    <br>
-    <br>
-  </div>
-  </div>
-{% endblock %}
+    </div>
+  </body>
+</html>

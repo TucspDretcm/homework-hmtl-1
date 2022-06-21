@@ -2,15 +2,36 @@
 <html>
 <head>
 
-  <script> 
-  document.addEventListener('DOMContentLoaded', () => {
-  document.querySelector("#botoncrearcuenta").disabled = true;
+  <script>  
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector("#form").onsubmit = () => {
+        const request = new XMLHttpRequest();
+        const account = document.querySelector("#registrousuario").value;
+        const psw = document.querySelector("#registrocontraseña1").value;
 
-  /*
-  document.querySelector("#alert-error-button").onclick = () => {
-    document.querySelector("#alert-error").style.visibility =  "hidden";
-  }
-  */
+        request.open('POST', 'http://127.0.0.1:5000/new_user');
+
+        request.onload = () => {
+          const data = JSON.parse(request.responseText);
+          if(data.success){
+            location.href = "login.html";
+          }
+          else{
+            alert("El nombre de usuario ya existe.");
+            location.reload();
+          }
+        }
+
+        const data = new FormData();
+        data.append('account', account);
+        data.append('password', psw);
+
+        request.send(data);
+        return false;
+      };
+
+
+  document.querySelector("#botoncrearcuenta").disabled = true;
 
   function comprobar(){
     if (document.querySelector("#registrousuario").value.length > 0 && document.querySelector("#registrocontraseña1").value.length > 0 && document.querySelector("#registrocontraseña2").value.length > 0 ){
@@ -62,7 +83,7 @@
 
     <label>Nombre de Usuario:</label>
 
-    <form>
+    <form id="form">
       <input id="registrousuario" type="text" placeholder="Ingresa tu Usuario " name="user">
 
       <label>Nueva Contraseña:</label>

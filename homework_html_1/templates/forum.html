@@ -5,31 +5,54 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link rel="stylesheet" type="text/css" href="../static/my_bar_style.css">
       <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
-        <script>
-            /*
-            document.addEventListener('DOMContentLoaded', () => {
-                document.querySelector("#b_submit").disabled = true;
-                document.querySelector("#task").onkeyup = () => {
-                    if (document.querySelector("#task").value.length > 0)
-                        document.querySelector("#b_submit").disabled = false;
-                    else
-                        document.querySelector("#b_submit").disabled = true;
+      <script type="text/javascript">
+            function logout(){
+                const request = new XMLHttpRequest();
+                request.open('POST', 'http://127.0.0.1:5000/logout');
+                request.send("logout post");
+            
+                request.onload = () => {
+                    location.href = "login.html";
                 }
-                document.querySelector('#new-task').onsubmit = () => {
-                    const li = document.createElement('li');
-                    if (document.querySelector('#task').value === "") {
-                        return false;
-                    }
-                    li.innerHTML = document.querySelector('#task').value;
-                    document.querySelector('#tasks').append(li);
-                    document.querySelector('#task').value = '';
-                    document.querySelector("#b_submit").disabled = true;
-                    return false;
-                };
-
-            });
-            */
+            }
             document.addEventListener('DOMContentLoaded', () => {
+                const request = new XMLHttpRequest();
+                request.open('POST', 'http://127.0.0.1:5000/forum_data');
+                request.onload = () => {
+                  const data = JSON.parse(request.responseText);
+                    if(data.success){
+                      var datos = data.data;
+                      for(let i in datos){
+                        var li = document.createElement("li");
+                        li.innerHTML = datos[i]["username"] + ": " + datos[i]["comment"];
+                        document.querySelector(".lista_comentarios").appendChild(li);
+                      }
+                    }
+                }
+
+                request.send("get request");
+
+                document.querySelector("#form").onsubmit = () => {
+                    const request = new XMLHttpRequest();
+                    const cm = document.querySelector("#task").value;
+                    request.open('POST', 'http://127.0.0.1:5000/forum_send');
+
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        if(data.success){
+                            location.reload();
+                        }
+                        else{
+                            location.href = "login.html";
+                        }
+                    }
+
+                    const data = new FormData();
+                    data.append("comment", cm);
+                    request.send(data);
+                    return false;
+                  };
+
                 document.querySelector("#b_submit").disabled = true;
                 document.querySelector("#task").onkeyup = () => {
                     if (document.querySelector("#task").value.length > 0 && document.querySelector("#task").value.length < 251)
@@ -39,7 +62,9 @@
                 }
             });
         </script>
+
         <title>Forum</title>
+
         <style type="text/css">
             .botton {
                 margin: 2em;
@@ -70,7 +95,7 @@
         
         <a href="cart.html"><img src="../static/imagenes/carrito.jpg" class="carrito"></a>
 
-        <a href="login.html" class="options-3"><b>Sign Out</b></a>
+        <b class="options-3" onclick="logout()">Sign Out</b>
 
       </nav>  
     </header>
@@ -86,15 +111,15 @@
     <div class="botton">
         <h4> PON TU COMENTARIO AQUÍ:</h4>
 
-        <form id="new-task">
-            <input id="task" autocomplete="off" autofocus placeholder="Opinión" type="text" name="comment">
+        <form id="form">
+            <input id="task" autocomplete="off" autofocus placeholder="Opinión" type="text">
             <input id="b_submit" type="submit" value="Publicar">
         </form>
 
     	<br>
     	<h4> COMENTARIOS: </h4>
     	<br>
-        <ul>
+        <ul class="lista_comentarios">
 
         </ul>
     </div>
