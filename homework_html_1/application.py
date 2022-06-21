@@ -7,7 +7,6 @@ import templates.algoritmo_simetrico_por_series as AlgAbs
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from flask_cors import CORS
-import datetime
 
 app = Flask(__name__)
 app.secret_key = "super secret"  # uso de alert
