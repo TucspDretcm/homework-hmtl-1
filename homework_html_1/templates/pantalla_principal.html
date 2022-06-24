@@ -51,6 +51,10 @@
             }
         }
 
+        function go_db_show(){
+          location.href = "mysql_preview.html";
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const request = new XMLHttpRequest();
             request.open('POST', 'http://127.0.0.1:5000/main_load');
@@ -66,6 +70,7 @@
 
                     var select = document.createElement("input");
                     select.setAttribute("type","button");
+                    select.setAttribute("class", "botons");
                     select.setAttribute("value",productos[i].producto);
                     select.setAttribute("onclick","select_product("+productos[i].product_ID+")");
 
@@ -84,21 +89,87 @@
                     if(data.admi){
                       var op = document.createElement("input");
                       op.setAttribute("type","button");
+                      op.setAttribute("class", "botons");
                       op.setAttribute("value", "Edit product");
                       //op.setAttribute("onclick","edit_product("+productos[i].product_ID+")");
                       document.querySelector(".products").appendChild(op);
                       op = document.createElement("input");
+                      op.setAttribute("class", "botons");
                       op.setAttribute("type","button");
                       op.setAttribute("value", "Delete product");
                       //op.setAttribute("onclick","delete_product("+productos[i].product_ID+")");
                       document.querySelector(".products").appendChild(op);
                     }
                 }
-                for(let i=0; i<4; i++){
+
+                if(data.admi){
+                  var section = document.createElement("section");
+                  section.setAttribute("class", "form-register-products");
+
+                  var title= document.createElement("h4");
+                  title.innerHTML = "Formulario de Registro de Productos";
+                  section.appendChild(title);
+
+                  var p = document.createElement("p");
+                  p.innerHTML = " Aqui puedes ingresar tus propios productos!!! ";
+                  section.appendChild(p);
+
+                  var form = document.createElement("form");
+                  form.setAttribute("class", "form-admi");
+
+                  var op = document.createElement("input");
+                  op.setAttribute("type","text");
+                  op.setAttribute("class", "controls");
+                  op.setAttribute("id", "producto");
+                  op.setAttribute("placeholder", "nombre del producto");
+                  form.appendChild(op);
+
+                  var op = document.createElement("input");
+                  op.setAttribute("type","text");
+                  op.setAttribute("class", "controls");
+                  op.setAttribute("id", "precio");
+                  op.setAttribute("placeholder", "precio a pagar");
+                  form.appendChild(op);
+
+                  var op = document.createElement("input");
+                  op.setAttribute("type","text");
+                  op.setAttribute("class", "controls");
+                  op.setAttribute("id", "imagen");
+                  op.setAttribute("placeholder", "ingrese imagen(.jpg, .png, .jpeg)");
+                  form.appendChild(op);
+
+                  var op = document.createElement("textarea");
+                  op.setAttribute("style", "width:90%; heigth:70%;");
+                  op.setAttribute("class", "controls");
+                  op.setAttribute("id", "descripcion");
+                  op.setAttribute("placeholder", "Ingrese una breve descripcion, puede saltar de linea para nueva biñeta");
+                  var div = document.createElement("div");
+                  div.appendChild(op);
+                  form.appendChild(div);
+
+                  var op = document.createElement("input");
+                  op.setAttribute("type","submit");
+                  op.setAttribute("class", "botons");
+                  op.setAttribute("id", "registar-admi");
+                  op.setAttribute("value", " Resgistrar producto ");
+                  form.appendChild(op);
+                  
+
+                  var op = document.createElement("input");
+                  op.setAttribute("type","button");
+                  op.setAttribute("class", "botons");
+                  op.setAttribute("value", " Mysql DataBase show ");
+                  op.setAttribute("onclick", "go_db_show()");
+                  form.appendChild(op);
+
+                  section.appendChild(form);
+                  document.querySelector(".products").appendChild(section);
+                }
+                for(let i=0; i<3; i++){
                   document.querySelector(".products").appendChild(document.createElement("br"));
                 }
-            }
-        }
+              }
+          }
 
         request.send("get request");
 
@@ -132,7 +203,7 @@
     <div class="products" align="center">
       <br>
       <br>
-      <u><h1>Llena tu carrito del mejor Hardware</h1></u>
+      <u style="color:white;"><h1 style="background: black; color:white; width: 50%; padding: 40px 5px;">Llena tu carrito del mejor Hardware</h1></u>
 
     </div>
   </body>
