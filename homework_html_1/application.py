@@ -67,17 +67,19 @@ def validateUser():
     return jsonify({'success':success})
 
 
-'''
-@app.route("/pantalla_principal", methods=["POST"])
-def newProduct():
-    producto = request.form.get("producto")
 
+@app.route("/new_product", methods=["POST"])
+def newProduct():
+    if 'loggedin' not in session:
+        return jsonify({'success':True})
+    data = {'success':False}
+    producto = request.form.get("producto")
     precio = request.form.get("precio")
     try:
         precio = float(precio)
     except:
-        precio = 0.0
-
+        data["msg"] = "El precio ingresado es erroneo."
+        return jsonify(data)
     imagen = request.form.get("imagen")
     descrip = request.form.get("descripcion")
     descrip = descrip.split("\n")
@@ -85,12 +87,13 @@ def newProduct():
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-    try:
+    cursor.execute("show tables like 'Products'")
+    if cursor.fetchall():
         cursor.execute(f"SELECT * FROM Products WHERE producto='{producto}'")
         if cursor.fetchone():
-            flash("alert javascript etc")
-            return redirect("pantalla_principal")
-    except:
+            data["msg"] = "El producto ya existe en la base de datos."
+            return jsonify(data)
+    else:
         cursor.execute("""CREATE TABLE Products 
             (product_ID int PRIMARY KEY AUTO_INCREMENT, 
             producto VARCHAR(50), precio FLOAT,
@@ -99,10 +102,9 @@ def newProduct():
 
     cursor.execute(f"INSERT INTO Products (producto, precio, imagen, descripcion) VALUES ( '{producto}', '{precio}', '{imagen}', '{descrip}')")
     mysql.connection.commit()
+    data["success"] = True
+    return jsonify(data)
 
-    return redirect("pantalla_principal")
-
-'''
 
 
 @app.route("/logout", methods=["POST"])
@@ -152,14 +154,16 @@ def productos_set(id_p):
 
     return f"setting element with id {id_p}"
 
-
-@app.route("/pantalla_principal/del/<int:id_p>", methods=["POST"])
-def productos_del(id_p):
-    if "loggedin" not in session:
-        return redirect("../../login")
-    return f"deleting element with id {id_p}"
-
 '''
+@app.route("/main/del/<string:id_p>", methods=["POST"])
+def productos_del(id_p):
+    if 'loggedin' not in session:
+        return jsonify({'success':False})
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(f"DELETE FROM Products WHERE product_ID='{int(id_p)}'")
+    mysql.connection.commit()
+    return jsonify({'success':True})
+
 
 @app.route("/forum_send", methods=["POST"])
 def newComment():

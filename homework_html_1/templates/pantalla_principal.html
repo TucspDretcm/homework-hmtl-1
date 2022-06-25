@@ -9,6 +9,7 @@
       <title>Amaxon</title>
       <script type="text/javascript">
         function logout(){
+          /*
           const request = new XMLHttpRequest();
           request.open('POST', 'http://127.0.0.1:5000/logout');
           request.send("logout post");
@@ -16,6 +17,8 @@
           request.onload = () => {
             location.href = "login.html";
           }
+          */
+          location.href = "login.html";
         }
 
         function select_product(id_product){
@@ -44,15 +47,44 @@
         function delete_product(id_product){
             const request = new XMLHttpRequest();
             request.open('POST', 'http://127.0.0.1:5000/main/del/'+id_product);
-            request.send({msg:"deleting product"});
+            request.send("deleting product");
         
             request.onload = () => {
+            const data = JSON.parse(request.responseText);
+              if(data.success){
                 location.reload();
+              }
+              else{
+                location.href = "login";
+              }
             }
         }
 
         function go_db_show(){
           location.href = "mysql_preview.html";
+        }
+
+        function send_new_product(){
+          const request = new XMLHttpRequest();
+          const data = new FormData();
+          data.append('producto', document.querySelector("#producto").value);
+          data.append('precio', document.querySelector("#precio").value);
+          data.append('imagen', document.querySelector("#imagen").value);
+          data.append('descripcion', document.querySelector("#descripcion").value);
+
+          request.open('POST', 'http://127.0.0.1:5000/new_product');
+          request.send(data);
+
+          request.onload = () => {
+            const data = JSON.parse(request.responseText);
+            if(data.success){
+              location.reload();
+            }
+            else{
+              alert(data.msg);
+            }
+          }
+
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -97,7 +129,7 @@
                       op.setAttribute("class", "botons");
                       op.setAttribute("type","button");
                       op.setAttribute("value", "Delete product");
-                      //op.setAttribute("onclick","delete_product("+productos[i].product_ID+")");
+                      op.setAttribute("onclick","delete_product("+productos[i].product_ID+")");
                       document.querySelector(".products").appendChild(op);
                     }
                 }
@@ -148,7 +180,8 @@
                   form.appendChild(div);
 
                   var op = document.createElement("input");
-                  op.setAttribute("type","submit");
+                  op.setAttribute("type","button");
+                  op.setAttribute("onclick", "send_new_product()");
                   op.setAttribute("class", "botons");
                   op.setAttribute("id", "registar-admi");
                   op.setAttribute("value", " Resgistrar producto ");
@@ -172,7 +205,6 @@
           }
 
         request.send("get request");
-
         });
 
       </script>

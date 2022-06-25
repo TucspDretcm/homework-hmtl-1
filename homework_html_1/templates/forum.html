@@ -7,6 +7,7 @@
       <script src="https://kit.fontawesome.com/16a7bdab0a.js" crossorigin="anonymous"></script>
       <script type="text/javascript">
             function logout(){
+                /*
                 const request = new XMLHttpRequest();
                 request.open('POST', 'http://127.0.0.1:5000/logout');
                 request.send("logout post");
@@ -14,6 +15,8 @@
                 request.onload = () => {
                     location.href = "login.html";
                 }
+                */
+                location.href = "login.html";
             }
             document.addEventListener('DOMContentLoaded', () => {
                 const request = new XMLHttpRequest();

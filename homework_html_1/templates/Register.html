@@ -4,8 +4,11 @@
 
   <script>  
     document.addEventListener('DOMContentLoaded', () => {
+      const request = new XMLHttpRequest();
+      request.open('POST', 'http://127.0.0.1:5000/logout');
+      request.send("reset all");
+      
       document.querySelector("#form").onsubmit = () => {
-        const request = new XMLHttpRequest();
         const account = document.querySelector("#registrousuario").value;
         const psw = document.querySelector("#registrocontraseña1").value;
 

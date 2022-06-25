@@ -65,6 +65,7 @@
 
       <script type="text/javascript">
         function logout(){
+            /*
             const request = new XMLHttpRequest();
             request.open('POST', 'http://127.0.0.1:5000/logout');
             request.send("logout post");
@@ -72,6 +73,8 @@
             request.onload = () => {
                 location.href = "login.html";
             }
+            */
+            location.href = "login.html";
         }
 
         function delete_product(id_product){
@@ -156,7 +159,7 @@
                 }
             }
             else if (data.action == 'registrar'){
-                location.href = 'register.html';
+                location.href = 'login.html';
             }
         }
 
