@@ -47,7 +47,7 @@ body {
     margin-bottom: 20px;
   }
 
-.Login input[type="text"], .Login input[type="contraseña"] {
+.Login input[type="text"], .Login input[type="password"] {
     border: none;
     border-bottom: 1px solid rgb(255, 255, 255);
     background: transparent;

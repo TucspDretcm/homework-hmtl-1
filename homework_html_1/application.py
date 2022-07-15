@@ -14,7 +14,7 @@ CORS(app)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'gabo'
 app.config['MYSQL_DB'] = 'dbp'
 #app.config["USE_PERMANENT_SESSION"] = True
 
@@ -121,15 +121,14 @@ def login_render():
 @app.route("/main_load", methods=["POST"])
 def pantalla_render():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    data={"success":False}
+    data={"success":True}
     cursor.execute("show tables like 'Products'")
     if cursor.fetchall():
         cursor.execute(f"""SELECT pr.product_ID, pr.producto, pr.imagen FROM Products pr""")
         data['products'] = cursor.fetchall()
-        data['success'] = True
-        data['admi'] = False
-        if 'loggedin' in session:
-            data['admi'] = True if session['username'] == AccountAdministration else False
+    data['admi'] = False
+    if 'loggedin' in session:
+        data['admi'] = True if session['username'] == AccountAdministration else False
     return jsonify(data)
 
 
